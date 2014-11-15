@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8285B27B-8BEE-4349-B846-762183DAA91D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ShuttleBus</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9D706CDA01D466A8EF316A1A1645565D54B1F07B</key>
+		<string>https://github.com/6vgaga/ShuttleBus.git</string>
+		<key>A7BFF4AF354A1B8020ECE82153DC1961B61C6F3C</key>
+		<string>github.com:wupujun/ShuttleFinder.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>IOSclient/ShuttleBus/ShuttleBus.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9D706CDA01D466A8EF316A1A1645565D54B1F07B</key>
+		<string>../../../../../Documents/ShuttleBus</string>
+		<key>A7BFF4AF354A1B8020ECE82153DC1961B61C6F3C</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:wupujun/ShuttleFinder.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>A7BFF4AF354A1B8020ECE82153DC1961B61C6F3C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9D706CDA01D466A8EF316A1A1645565D54B1F07B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ShuttleBus</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A7BFF4AF354A1B8020ECE82153DC1961B61C6F3C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ShuttleFinder</string>
+		</dict>
+	</array>
+</dict>
+</plist>
