@@ -8,6 +8,12 @@
 
 #import "RestRequestor.h"
 
+@implementation RestQueryParamter
+
+@synthesize path,uri,fieldMap;
+
+@end
+
 @implementation RestRequestor
 @synthesize delegate;
 
@@ -33,18 +39,27 @@
 //remote method
 - (void) getBusLineList : (id<AsynCallCompletionNotify>) callbackObj {
     
-    [self callRestAPIAndReturnObjAsArray:@"bus/webresources/" mappedClass:[BusLine class] callback:callbackObj];
+    //[self callRestAPIAndReturnObjAsArray:@"bus/webresources/" mappedClass:[BusLine class] callback:callbackObj];
+    RestQueryParamter * queryParameter= [[RestQueryParamter alloc]init];
+    queryParameter.uri=@"bus/webresources/";
+    queryParameter.path=@"buslines";
+    queryParameter.fieldMap= @{
+                               @"driverName": @"driverName",
+                               @"lineName": @"lineName"
+                               };
+    
+    [self callRestAPIAndReturnObjAsArray:queryParameter  class:[BusLine class] callback:callbackObj];
 
 }
 
-- (void) callRestAPIAndReturnObjAsArray: (NSString*) restURI : (Class) mappedClass : (id<AsynCallCompletionNotify>) callback {
+- (void) callRestAPIAndReturnObjAsArray: (RestQueryParamter*) queryParamter  class:(Class)mappedClass  callback:(id<AsynCallCompletionNotify>) callbackObj {
     NSLog(@"start query Shuttlebus location from server");
     
     //delegate=callbakcObj;
     
     NSString* serverIP= [RestRequestor getServerAddress];
     //NSString* busLineURL= [NSString stringWithFormat:@"http://%@/bus/webresources/",serverIP];
-    NSString* busLineURL= [NSString stringWithFormat:@"http://%@/%@",serverIP, restURI];
+    NSString* busLineURL= [NSString stringWithFormat:@"http://%@/%@",serverIP, queryParamter.uri];
     
     
     RKObjectManager *manager =  [RKObjectManager managerWithBaseURL:[NSURL URLWithString:busLineURL]];
@@ -55,10 +70,7 @@
     
     
     RKObjectMapping* objMapping = [RKObjectMapping mappingForClass:mappedClass];
-    [objMapping addAttributeMappingsFromDictionary:@{
-                                                         @"driverName": @"driverName",
-                                                         @"lineName": @"lineName"
-                                                         }];
+    [objMapping addAttributeMappingsFromDictionary: queryParamter.fieldMap];
     
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:objMapping
                                                                                             method:RKRequestMethodAny
@@ -70,7 +82,7 @@
     [manager addResponseDescriptor:responseDescriptor];
     
     [manager getObject:nil
-                  path:@"buslines"
+                  path:queryParamter.path
             parameters:nil
                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                    
@@ -79,7 +91,7 @@
                    NSMutableArray *busLinesArray= [NSMutableArray arrayWithArray:mappingResult.array];
                    
                    
-                   [callback setObjectArray:busLinesArray];
+                   [callbackObj getReturnedObjectArray:busLinesArray];
                    /* for (Location* postion in locArray)
                     {
                     NSLog(@"%@'s postion:  Longitude=%@,Latitude=%@ on %@", postion.userID, postion.longitude,postion.latitude, postion.time);
@@ -97,9 +109,30 @@
 }
 
 
-+ (Location*) getReportedBusLineLocation: (NSString*) lineID {
+- (void) getReportedBusLineLocation: (NSString*) lineID  callback:(id<AsynCallCompletionNotify>) callbackObj {
+ 
+    RestQueryParamter * queryParameter= [[RestQueryParamter alloc]init];
+    queryParameter.uri=@"bus/webresources/";
+    queryParameter.path=@"locations";
+    //json:     latitude":"37.337600","longitude":"-122.035901","userID":"user1","time":"2014-11-16 01:44:33"
     
-    return nil;
+  /* 
+    class attributes:
+    @property (strong,nonatomic) NSString* latitude;
+    @property (strong,nonatomic) NSString* longitude;
+    @property (strong,nonatomic) NSString* reportedUserID;
+    @property (strong,nonatomic) NSString* reportedTime;
+    @property (strong,nonatomic) NSString* locationName;
+*/
+    queryParameter.fieldMap= @{
+                               @"latitude": @"latitude",
+                               @"longitude": @"longitude",
+                               @"reportedUserID": @"userID",
+                               @"reportedTime":@"time"
+                               };
+    
+    [self callRestAPIAndReturnObjAsArray:queryParameter  class:[Location class] callback:callbackObj];
+    
 }
 + (bool) updateMyLocationToServer: (Location*) myLocation {
     

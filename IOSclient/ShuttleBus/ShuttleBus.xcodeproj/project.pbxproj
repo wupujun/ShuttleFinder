@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A07F4111A179F0B009BB1B8 /* RestRequestor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07F40E1A179F0B009BB1B8 /* RestRequestor.m */; };
+		5A07F4121A179F0B009BB1B8 /* ShareObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07F4101A179F0B009BB1B8 /* ShareObject.m */; };
 		5A1DA82D19C41CFA002B859D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1DA82C19C41CFA002B859D /* Foundation.framework */; };
 		5A1DA82F19C41CFA002B859D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1DA82E19C41CFA002B859D /* CoreGraphics.framework */; };
 		5A1DA83119C41CFA002B859D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1DA83019C41CFA002B859D /* UIKit.framework */; };
@@ -53,6 +55,10 @@
 /* Begin PBXFileReference section */
 		3D63BE22FA20F43AA2181C21 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4BF365A7F17080AD2A63A7E6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		5A07F40D1A179F0B009BB1B8 /* RestRequestor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RestRequestor.h; path = ShareObj/RestRequestor.h; sourceTree = "<group>"; };
+		5A07F40E1A179F0B009BB1B8 /* RestRequestor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestRequestor.m; path = ShareObj/RestRequestor.m; sourceTree = "<group>"; };
+		5A07F40F1A179F0B009BB1B8 /* ShareObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareObject.h; path = ShareObj/ShareObject.h; sourceTree = "<group>"; };
+		5A07F4101A179F0B009BB1B8 /* ShareObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareObject.m; path = ShareObj/ShareObject.m; sourceTree = "<group>"; };
 		5A1DA82919C41CFA002B859D /* ShuttleBus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShuttleBus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A1DA82C19C41CFA002B859D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5A1DA82E19C41CFA002B859D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -127,9 +133,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A07F4131A179F15009BB1B8 /* ShareObj */ = {
+			isa = PBXGroup;
+			children = (
+				5A07F40D1A179F0B009BB1B8 /* RestRequestor.h */,
+				5A07F40E1A179F0B009BB1B8 /* RestRequestor.m */,
+				5A07F40F1A179F0B009BB1B8 /* ShareObject.h */,
+				5A07F4101A179F0B009BB1B8 /* ShareObject.m */,
+			);
+			name = ShareObj;
+			sourceTree = "<group>";
+		};
 		5A1DA82019C41CFA002B859D = {
 			isa = PBXGroup;
 			children = (
+				5A07F4131A179F15009BB1B8 /* ShareObj */,
 				5A73AD301A172D0A00395079 /* AppDelegate.h */,
 				5A73AD311A172D0A00395079 /* AppDelegate.m */,
 				5A73AD321A172D0A00395079 /* bgMain.jpg */,
@@ -407,6 +425,8 @@
 			files = (
 				5A73AD4A1A172D0A00395079 /* main.m in Sources */,
 				5A1DA89019C41EED002B859D /* GHRevealViewController.m in Sources */,
+				5A07F4111A179F0B009BB1B8 /* RestRequestor.m in Sources */,
+				5A07F4121A179F0B009BB1B8 /* ShareObject.m in Sources */,
 				5A73AD4C1A172D0A00395079 /* MenuListCell.m in Sources */,
 				5A73AD4D1A172D0A00395079 /* MenuListViewController.m in Sources */,
 				5A1DA89119C41EED002B859D /* GHSidebarSearchViewController.m in Sources */,

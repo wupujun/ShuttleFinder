@@ -48,4 +48,38 @@
 
 @end
 
+static ShuttleDataStore *_instance=nil;
+
+@implementation ShuttleDataStore
+
+@synthesize busLines;
+
++ (id) instance{
+    @synchronized(self) {
+        if (_instance==nil) {
+            _instance= [[self alloc] init];
+        }
+    }
+    return _instance;
+}
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    @synchronized(self) {
+        if (_instance == nil) {
+            _instance = [super allocWithZone:zone];
+            return _instance;
+        }
+    }
+    return nil;
+}
+
+//copy返回单例本身
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
+@end
+
 

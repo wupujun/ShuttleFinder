@@ -34,6 +34,7 @@
 @property (strong,nonatomic) NSString* driverName;
 @property (strong,nonatomic) NSString* lineName;
 @property (strong,nonatomic) NSArray* stopList;
+@property (strong,nonatomic) Location* lastLocation;
 
 @end
 
@@ -55,4 +56,12 @@
 //初始化方法
 -(id)initWithCoordinate:(CLLocationCoordinate2D)c andTitle:(NSString*)t;
 
+@end
+
+//global dataStore
+@interface ShuttleDataStore : NSObject
+
+@property (strong,nonatomic) NSMutableArray* busLines;
+
++(id) instance;
 @end

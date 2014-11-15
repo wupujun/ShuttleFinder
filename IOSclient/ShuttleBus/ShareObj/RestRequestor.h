@@ -13,8 +13,15 @@
 
 @protocol AsynCallCompletionNotify <NSObject>
 
-- (NSInteger) setObjectArray: (NSArray*) objectArray;
+- (NSInteger) getReturnedObjectArray: (NSArray*) objectArray;
 
+@end
+
+@interface RestQueryParamter:NSObject
+
+@property(nonatomic,strong) NSString* uri;
+@property(strong,nonatomic) NSString* path;
+@property(strong,nonatomic) NSDictionary * fieldMap;
 @end
 
 @interface RestRequestor : NSObject
@@ -24,10 +31,10 @@
 
 //remote mothods
 - (void) getBusLineList : (id<AsynCallCompletionNotify>) callbakcObj;
-- (Location*) getReportedBusLineLocation: (NSString*) lineID;
+- (void) getReportedBusLineLocation: (NSString*) lineID callback:(id<AsynCallCompletionNotify>) callbakcObj;
 - (bool) updateMyLocationToServer: (Location*) myLocation;
-- (void) callRestAPIAndReturnObjAsArray: (NSString*) restURI : (Class) mappedClass : (id<AsynCallCompletionNotify>) callback;
-
+//- (void) callRestAPIAndReturnObjAsArray: (NSString*) restURI : mappedClass : (id<AsynCallCompletionNotify>) callback;
+- (void) callRestAPIAndReturnObjAsArray: (RestQueryParamter*)queryParamter  class:(Class)mappedClass  callback:(id<AsynCallCompletionNotify>) callbackObj;
 //local methods
 + (NSString*) getServerAddress;
 - (bool) setServerAddress: (NSString*) serverIP;

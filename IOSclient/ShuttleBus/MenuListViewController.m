@@ -10,22 +10,23 @@
 #import "SideMenuUtil.h"
 #import "MenuListCell.h"
 
-//#import "Restkit/RestKit.h"
+
 
 #define kSidebarCellTextKey	@"CellText"
 #define kSidebarCellImageKey	@"CellImage"
 
 @interface MenuListViewController () {
-	NSArray *_headers;	//!< 节头文本.
-	NSArray *_cellInfos;	//!< 单元格信息.
-	NSArray *_controllers;	//!< 导航控制器集.
+	NSMutableArray *_headers;	//!< 节头文本.
+	
+    NSMutableArray *_cellInfos;	//!< 单元格信息.
+	NSMutableArray *_controllers;	//!< 导航控制器集.
 }
 
 @end
 
-@implementation MenuListViewController
+@implementation MenuListViewController;
 
-@synthesize revealController;
+@synthesize revealController,lineLoadingIcon;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -56,39 +57,85 @@
     }
     
     // 初始化表格.
-    _headers = @[
-                 [NSNull null],
-                 @"",
-                 @"",
-                 ];
-    _cellInfos = @[
+    _headers =[[NSMutableArray alloc] init];
+    _cellInfos = [[NSMutableArray alloc] init];
+    _controllers = [[NSMutableArray alloc] init];
+    
+    [_headers addObject:
+     [NSNull null]
+     ];
+
+    [_cellInfos addObject:
                    @[
                        @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Home", @"")},
-                       ],
-                   @[
-                       @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Line 1", @"")},
-                       @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Line 2", @"")},
-                       @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Line 3", @"")},
-                       @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Line 4", @"")},
-                       ],
-                   @[
-                       @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Logout", @"")},
-                       ],
-                   ];
-    _controllers = @[
-                     @[
-                         [self.storyboard instantiateViewControllerWithIdentifier:@"HomeNavigationController"],
-                         ],
-                     @[
-                         [self.storyboard instantiateViewControllerWithIdentifier:@"ShuttleBusNavigationController"],
-                         [self.storyboard instantiateViewControllerWithIdentifier:@"ShuttleBusNavigationController"],
-                         [self.storyboard instantiateViewControllerWithIdentifier:@"ShuttleBusNavigationController"],
-                         [self.storyboard instantiateViewControllerWithIdentifier:@"ShuttleBusNavigationController"],
-                         ],
-                     @[
-                         @"logout",
-                         ],
-                     ];
+                       ]
+     ];
+    
+    [_controllers addObject:
+     
+     @[
+       [self.storyboard instantiateViewControllerWithIdentifier:@"HomeNavigationController"],
+       ]
+     ];
+    
+
+    
+    UIColor *bgColor = [UIColor colorWithRed:(50.0f/255.0f) green:(57.0f/255.0f) blue:(74.0f/255.0f) alpha:1.0f];
+    self.view.backgroundColor = bgColor;
+    self.menuTableView.delegate = self;
+    self.menuTableView.dataSource = self;
+    self.menuTableView.backgroundColor = [UIColor clearColor];
+    
+    
+    
+    [self selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionTop];
+    
+    [lineLoadingIcon startAnimating];
+    RestRequestor* requstor= [[RestRequestor alloc]init];
+    [requstor getBusLineList:self];
+    // ui.
+
+}
+
+- (void) fillBusLinesInfo: (NSArray*) arrayObject {
+    
+    if (arrayObject.count==0) {
+        NSLog(@"can't find any ShuttleBus line info from Server!!!");
+        return;
+    }
+    
+    
+    [_headers addObject:@""];
+    [_headers addObject:@""];
+    
+    NSMutableArray* infoArray = [[NSMutableArray alloc]init];
+    NSMutableArray* ctlArray= [[NSMutableArray alloc]init];
+    
+    for ( BusLine* busline in arrayObject) {
+        
+        [infoArray addObject:
+         @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(busline.lineName, @"")}
+         ];
+        
+        [ctlArray addObject:
+         [self.storyboard instantiateViewControllerWithIdentifier:@"ShuttleBusNavigationController"]
+         ];
+    }
+    
+    [_cellInfos addObject:infoArray];
+    [_cellInfos addObject:
+    @[
+      @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(@"Logout", @"")},
+      ]
+    ];
+
+    [_controllers addObject:ctlArray];
+    [_controllers addObject:
+     @[
+       @"logout",
+       ]
+     ];
+    
     
     // 添加手势.
     for (id obj1 in _controllers) {
@@ -101,14 +148,10 @@
             }
         }
     }
-    
-    // ui.
-    UIColor *bgColor = [UIColor colorWithRed:(50.0f/255.0f) green:(57.0f/255.0f) blue:(74.0f/255.0f) alpha:1.0f];
-    self.view.backgroundColor = bgColor;
-    self.menuTableView.delegate = self;
-    self.menuTableView.dataSource = self;
-    self.menuTableView.backgroundColor = [UIColor clearColor];
-    [self selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionTop];
+ 
+  //refresh UITable
+  [self.menuTableView reloadData];
+  [lineLoadingIcon stopAnimating];
 }
 
 - (void)didReceiveMemoryWarning
@@ -173,6 +216,9 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    if (_cellInfos.count==0) return 0;
+    
     return ((NSArray *)_cellInfos[section]).count;
 }
 
@@ -250,6 +296,16 @@
 	else {
 		[self dismissModalViewControllerAnimated:YES];
 	}
+}
+
+
+//implement Async
+
+-(NSInteger) getReturnedObjectArray: (NSArray*) objectArray {
+   
+    [self fillBusLinesInfo:objectArray];
+    
+    return objectArray.count;
 }
 
 @end

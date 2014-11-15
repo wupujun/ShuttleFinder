@@ -9,8 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "IRevealControllerProperty.h"
 
-@interface MenuListViewController : UIViewController <IRevealControllerProperty, UITableViewDataSource, UITableViewDelegate>
+//for Rest API
+#import "ShareObject.h"
+#import "RestRequestor.h"
+
+@interface MenuListViewController : UIViewController <IRevealControllerProperty, UITableViewDataSource, UITableViewDelegate,AsynCallCompletionNotify>
 
 @property (weak, nonatomic) IBOutlet UITableView *menuTableView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *lineLoadingIcon;
 
 @end

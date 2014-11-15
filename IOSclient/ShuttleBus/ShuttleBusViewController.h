@@ -10,7 +10,10 @@
 #import "IRevealControllerProperty.h"
 #import <MapKit/MapKit.h>
 
-@interface ShuttleBusViewController : UIViewController <IRevealControllerProperty, CLLocationManagerDelegate,MKMapViewDelegate>
+//for Rest API
+#import "RestRequestor.h"
+
+@interface ShuttleBusViewController : UIViewController <IRevealControllerProperty, CLLocationManagerDelegate,MKMapViewDelegate,AsynCallCompletionNotify>
 
 @property (retain, nonatomic) IBOutlet MKMapView *mapView;
 

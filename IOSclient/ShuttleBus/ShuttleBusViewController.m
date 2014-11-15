@@ -9,8 +9,15 @@
 #import "ShuttleBusViewController.h"
 #import "MarkPoint.h"
 
-@interface ShuttleBusViewController ()
 
+
+
+@interface ShuttleBusViewController ()
+{
+    NSTimer * shuttleQuerytimer;
+    bool isQueryInprogress;
+    MyLocation *_myPoint;
+}
 @end
 
 @implementation ShuttleBusViewController
@@ -44,6 +51,10 @@
     
     [mapView setZoomEnabled:YES];
     [mapView setScrollEnabled:YES];
+    
+    isQueryInprogress=false;
+    shuttleQuerytimer =  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(queryShuttleLocation) userInfo:nil repeats:YES];
+    //每1秒运行一次function方法。
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,5 +99,53 @@
     //放大到标注的位置
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coord, 250, 250);
     [self.mapView setRegion:region animated:YES];
+}
+
+//queryShuttle bus location
+-(void) queryShuttleLocation {
+    
+    if (isQueryInprogress) {
+        NSLog(@"the last Query isn't finished, skip it");
+        return;
+    }
+    
+    NSLog(@"start to query the shuttle bus location");
+    RestRequestor * req= [[RestRequestor alloc] init];
+    [req getReportedBusLineLocation:@""  callback:self];
+}
+
+
+- (NSInteger) getReturnedObjectArray: (NSArray*) objectArray {
+    
+    
+    
+    Location *lastPos=objectArray.lastObject;
+    NSLog(@"lat=%@,long=%@", lastPos.latitude,lastPos.longitude);
+    isQueryInprogress=false;
+    
+    
+    MKCoordinateSpan theSpan = MKCoordinateSpanMake(0.14,0.14);
+    theSpan.latitudeDelta = 0.01;
+    theSpan.longitudeDelta = 0.01;
+    CLLocationCoordinate2D center= CLLocationCoordinate2DMake([lastPos.latitude doubleValue], [lastPos.longitude doubleValue]);
+    MKCoordinateRegion theRegion= MKCoordinateRegionMakeWithDistance(center, 250, 250);
+    
+    
+    theRegion.span = theSpan;
+    [self.mapView setRegion:theRegion];
+    //把当前位置设为中心
+    [mapView regionThatFits:theRegion];
+    
+    [mapView removeAnnotation:_myPoint];
+    
+    NSString *titile = [NSString stringWithFormat:@"%@,%@",lastPos.latitude,lastPos.longitude];
+    _myPoint = [[MyLocation alloc] initWithCoordinate:center andTitle:titile];
+    //添加标注
+    NSLog(@"New Location=%@",titile);
+    [mapView addAnnotation:_myPoint];
+
+    
+    
+    return objectArray.count;
 }
 @end
