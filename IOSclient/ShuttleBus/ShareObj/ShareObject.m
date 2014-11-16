@@ -48,6 +48,15 @@
 
 @end
 
+//
+@implementation UserClientSetting
+
+@synthesize userName,lineID,freshInterval,reportTimeWindows;
+
+@end
+
+
+//implementation of singleton global UserStore
 static ShuttleDataStore *_instance=nil;
 
 @implementation ShuttleDataStore

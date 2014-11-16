@@ -114,9 +114,11 @@
     RestQueryParamter * queryParameter= [[RestQueryParamter alloc]init];
     queryParameter.uri=@"bus/webresources/";
     queryParameter.path=@"locations";
-    //json:     latitude":"37.337600","longitude":"-122.035901","userID":"user1","time":"2014-11-16 01:44:33"
+
     
   /* 
+   json Object returned:     latitude":"37.337600","longitude":"-122.035901","userID":"user1","time":"2014-11-16 01:44:33"
+   
     class attributes:
     @property (strong,nonatomic) NSString* latitude;
     @property (strong,nonatomic) NSString* longitude;

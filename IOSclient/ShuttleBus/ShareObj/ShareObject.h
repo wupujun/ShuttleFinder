@@ -45,6 +45,18 @@
 
 @end
 
+
+@interface UserClientSetting: NSObject
+
+@property (strong,nonatomic) NSString* userName;
+@property (strong,nonatomic) NSString* lineID;
+
+@property (nonatomic) NSInteger freshInterval;
+@property (strong,nonatomic) NSMutableArray* reportTimeWindows;
+
+@end
+
+
 @interface MyLocation : NSObject<MKAnnotation>
 
 
@@ -62,6 +74,6 @@
 @interface ShuttleDataStore : NSObject
 
 @property (strong,nonatomic) NSMutableArray* busLines;
-
+@property (strong,nonatomic) UserClientSetting * clientSetting;
 +(id) instance;
 @end
