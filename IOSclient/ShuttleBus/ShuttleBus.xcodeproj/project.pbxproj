@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5A07F4111A179F0B009BB1B8 /* RestRequestor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07F40E1A179F0B009BB1B8 /* RestRequestor.m */; };
 		5A07F4121A179F0B009BB1B8 /* ShareObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07F4101A179F0B009BB1B8 /* ShareObject.m */; };
+		5A07F4161A189A85009BB1B8 /* ClientSettingTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A07F4151A189A85009BB1B8 /* ClientSettingTabController.m */; };
 		5A1DA82D19C41CFA002B859D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1DA82C19C41CFA002B859D /* Foundation.framework */; };
 		5A1DA82F19C41CFA002B859D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1DA82E19C41CFA002B859D /* CoreGraphics.framework */; };
 		5A1DA83119C41CFA002B859D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1DA83019C41CFA002B859D /* UIKit.framework */; };
@@ -59,6 +60,8 @@
 		5A07F40E1A179F0B009BB1B8 /* RestRequestor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestRequestor.m; path = ShareObj/RestRequestor.m; sourceTree = "<group>"; };
 		5A07F40F1A179F0B009BB1B8 /* ShareObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareObject.h; path = ShareObj/ShareObject.h; sourceTree = "<group>"; };
 		5A07F4101A179F0B009BB1B8 /* ShareObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareObject.m; path = ShareObj/ShareObject.m; sourceTree = "<group>"; };
+		5A07F4141A189A85009BB1B8 /* ClientSettingTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientSettingTabController.h; sourceTree = "<group>"; };
+		5A07F4151A189A85009BB1B8 /* ClientSettingTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClientSettingTabController.m; sourceTree = "<group>"; };
 		5A1DA82919C41CFA002B859D /* ShuttleBus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShuttleBus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A1DA82C19C41CFA002B859D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5A1DA82E19C41CFA002B859D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -147,6 +150,8 @@
 		5A1DA82019C41CFA002B859D = {
 			isa = PBXGroup;
 			children = (
+				5A07F4141A189A85009BB1B8 /* ClientSettingTabController.h */,
+				5A07F4151A189A85009BB1B8 /* ClientSettingTabController.m */,
 				5A07F4131A179F15009BB1B8 /* ShareObj */,
 				5A73AD301A172D0A00395079 /* AppDelegate.h */,
 				5A73AD311A172D0A00395079 /* AppDelegate.m */,
@@ -436,6 +441,7 @@
 				5A73AD501A172D0A00395079 /* SideMenuUtil.m in Sources */,
 				5A73AD481A172D0A00395079 /* HomeViewController.m in Sources */,
 				5A73AD4B1A172D0A00395079 /* MarkPoint.m in Sources */,
+				5A07F4161A189A85009BB1B8 /* ClientSettingTabController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

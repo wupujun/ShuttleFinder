@@ -10,6 +10,8 @@
 #import <MapKit/MKMapView.h>
 #import "MapKit/MapKit.h"
 
+//define the return object
+
 @interface ResultObject : NSObject
 
 @property (copy,nonatomic) NSString* status;
@@ -19,6 +21,7 @@
 
 @end
 
+//define loation object
 @interface Location : NSObject
 @property (strong,nonatomic) NSString* latitude;
 @property (strong,nonatomic) NSString* longitude;
@@ -28,6 +31,7 @@
 
 @end
 
+//define BusLine object
 
 @interface BusLine: NSObject
 
@@ -38,6 +42,7 @@
 
 @end
 
+//Bus stop
 @interface ShuttleStop: NSObject
 
 @property (nonatomic) time_t arrTime;
@@ -45,7 +50,7 @@
 
 @end
 
-
+//user setting in IOS
 @interface UserClientSetting: NSObject
 
 @property (strong,nonatomic) NSString* userName;
@@ -56,6 +61,7 @@
 
 @end
 
+//marker object
 
 @interface MyLocation : NSObject<MKAnnotation>
 
