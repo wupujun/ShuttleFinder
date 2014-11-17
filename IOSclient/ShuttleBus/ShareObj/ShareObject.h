@@ -53,11 +53,12 @@
 //user setting in IOS
 @interface UserClientSetting: NSObject
 
-@property (strong,nonatomic) NSString* userName;
-@property (strong,nonatomic) NSString* lineID;
+@property (copy,nonatomic) NSString* userName;
+@property (copy,nonatomic) NSString* lineID;
 
 @property (nonatomic) NSInteger freshInterval;
-@property (strong,nonatomic) NSMutableArray* reportTimeWindows;
+@property (copy,nonatomic) NSMutableArray* reportTimeWindows;
+@property (copy,nonatomic) NSString* serverIPPort;
 
 @end
 

@@ -51,7 +51,8 @@
 //
 @implementation UserClientSetting
 
-@synthesize userName,lineID,freshInterval,reportTimeWindows;
+@synthesize userName,lineID,freshInterval,reportTimeWindows,serverIPPort;
+
 
 @end
 
@@ -70,6 +71,15 @@ static ShuttleDataStore *_instance=nil;
         }
     }
     return _instance;
+}
+
+- (id) init {
+    
+    self= [ super init];
+    
+    self.clientSetting = [[UserClientSetting alloc] init];
+    
+    return self;
 }
 
 + (id)allocWithZone:(NSZone *)zone

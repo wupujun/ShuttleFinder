@@ -14,7 +14,7 @@
 
 @interface ShuttleBusViewController ()
 {
-    NSTimer * shuttleQuerytimer;
+    //NSTimer * shuttleQuerytimer;
     bool isQueryInprogress;
     MyLocation *_myPoint;
 }
@@ -53,7 +53,14 @@
     [mapView setScrollEnabled:YES];
     
     isQueryInprogress=false;
-    shuttleQuerytimer =  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(queryShuttleLocation) userInfo:nil repeats:YES];
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    NSInteger checkInterval= dataStore.clientSetting.freshInterval;
+    
+    if (checkInterval<=0) checkInterval=60;
+    
+    [self performSelector:@selector(queryShuttleLocation) withObject:nil afterDelay:checkInterval ];
+    //shuttleQuerytimer =  [NSTimer scheduledTimerWithTimeInterval:checkInterval target:self selector:@selector(queryShuttleLocation) userInfo:nil repeats:YES];
     //每1秒运行一次function方法。
 }
 
@@ -144,7 +151,10 @@
     NSLog(@"New Location=%@",titile);
     [mapView addAnnotation:_myPoint];
 
-    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    NSInteger checkInterval= dataStore.clientSetting.freshInterval;
+    [self performSelector:@selector(queryShuttleLocation) withObject:nil afterDelay:checkInterval ];
+    //shuttleQuerytimer.timeInterval=checkInterval;
     
     return objectArray.count;
 }

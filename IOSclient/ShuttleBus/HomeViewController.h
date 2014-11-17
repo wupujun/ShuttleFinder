@@ -10,5 +10,7 @@
 #import "IRevealControllerProperty.h"
 
 @interface HomeViewController : UIViewController <IRevealControllerProperty>
+- (IBAction)applySettingButtonClick:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *settingView;
 
 @end

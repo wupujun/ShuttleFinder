@@ -26,7 +26,12 @@
 
 //local method
 + (NSString*) getServerAddress {
-    NSString* serverIP= [NSString stringWithFormat:@"192.168.0.12:8080"];
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    NSString* serverIP=dataStore.clientSetting.serverIPPort;
+
+    
+    if (serverIP.length<1) serverIP=[NSString stringWithFormat:@"192.168.0.12:8080"];
     return serverIP;
 }
 

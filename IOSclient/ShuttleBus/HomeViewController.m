@@ -7,16 +7,20 @@
 //
 
 #import "HomeViewController.h"
+#import "ClientSettingTabController.h"
+
+#import "ShareObject.h"
 
 
-
-@interface HomeViewController ()
+@interface HomeViewController () {
+    ClientSettingTabController *_clientSettingView;
+}
 
 @end
 
 @implementation HomeViewController
 
-@synthesize revealController;
+@synthesize revealController,settingView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,7 +34,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    
+    UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
+    tapGr.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapGr];
 }
 
 - (void)didReceiveMemoryWarning
@@ -51,6 +59,30 @@
 */
 - (IBAction)showLeftMenu:(id)sender {
     [self.revealController toggleSidebar:!self.revealController.sidebarShowing duration:kGHRevealSidebarDefaultAnimationDuration];
+}
+
+- (IBAction)applySettingButtonClick:(id)sender {
+    NSString* ipAddress= _clientSettingView.serverIPLable.text;
+    NSInteger freshInterview=[_clientSettingView.checkIntervalInMin.text floatValue]*60;
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    NSLog(@"change server ip/port from %@ to %@",dataStore.clientSetting.serverIPPort, ipAddress);
+    NSLog(@"change server ip/port from %d to %d",dataStore.clientSetting.freshInterval, freshInterview);
+    dataStore.clientSetting.serverIPPort = ipAddress;
+    dataStore.clientSetting.freshInterval = freshInterview;
+    
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    _clientSettingView= (ClientSettingTabController*)  segue.destinationViewController;
+}
+
+
+-(void)viewTapped:(UITapGestureRecognizer*)tapGr
+{
+    [self resignFirstResponder];
 }
 
 @end

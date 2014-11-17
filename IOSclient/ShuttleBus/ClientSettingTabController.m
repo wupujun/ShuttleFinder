@@ -8,6 +8,9 @@
 
 #import "ClientSettingTabController.h"
 
+#import "ShareObject.h"
+#import "RestRequestor.h"
+
 @interface ClientSettingTabController ()
 
 @end
@@ -19,6 +22,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    [super viewDidLoad];
+    UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
+    tapGr.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapGr];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -42,7 +50,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    if (section==0) return 3;
+    if (section==0) return 4;
     if (section==1) return 1;
     if (section==2) return 3;
     
@@ -105,5 +113,15 @@
 
 - (IBAction)addNewCheckWindowClieck:(id)sender {
     NSLog(@"%@,%@,%@",self.userNameLabel.text,self.checkStartTime.text,checkEndTime.text);
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+}
+
+
+-(void)viewTapped:(UITapGestureRecognizer*)tapGr
+{
+    [checkEndTime resignFirstResponder];
+    [checkStartTime resignFirstResponder];
+    [_checkIntervalInMin resignFirstResponder];
 }
 @end
