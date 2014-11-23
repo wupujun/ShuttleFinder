@@ -13,7 +13,7 @@
 @interface ClientSetting : NSManagedObject
 
 @property (nonatomic, retain) NSString * serverIP;
-@property (nonatomic, retain) NSNumber * port;
+@property (nonatomic, retain) NSNumber * interval;
 @property (nonatomic, retain) NSString * userName;
 @property (nonatomic, retain) NSString * shuttleLine;
 

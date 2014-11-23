@@ -38,6 +38,9 @@
 		5A73AD4F1A172D0A00395079 /* ShuttleBusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A73AD411A172D0A00395079 /* ShuttleBusViewController.m */; };
 		5A73AD501A172D0A00395079 /* SideMenuUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A73AD431A172D0A00395079 /* SideMenuUtil.m */; };
 		5A73AD511A172D0A00395079 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A73AD451A172D0A00395079 /* ViewController.m */; };
+		5A8EC54B1A20A90800DDF077 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A8EC54A1A20A90800DDF077 /* CoreData.framework */; };
+		5A8EC54F1A20A94900DDF077 /* usersetting.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A8EC54D1A20A94900DDF077 /* usersetting.xcdatamodeld */; };
+		5A8EC5521A20B88600DDF077 /* ClientSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8EC5511A20B88600DDF077 /* ClientSetting.m */; };
 		5ADDEE871A172E41008E76EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5ADDEE851A172E41008E76EB /* InfoPlist.strings */; };
 		5ADDEE8A1A172F7D008E76EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5ADDEE881A172F7D008E76EB /* Main.storyboard */; };
 		AEB72F03C9884E54A4AE8CD1 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5132DAF31FC0505B139923 /* libPods.a */; };
@@ -106,6 +109,10 @@
 		5A73AD431A172D0A00395079 /* SideMenuUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideMenuUtil.m; sourceTree = "<group>"; };
 		5A73AD441A172D0A00395079 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		5A73AD451A172D0A00395079 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5A8EC54A1A20A90800DDF077 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		5A8EC54E1A20A94900DDF077 /* usersetting.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = usersetting.xcdatamodel; sourceTree = "<group>"; };
+		5A8EC5501A20B88600DDF077 /* ClientSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClientSetting.h; path = CoreData/ClientSetting.h; sourceTree = "<group>"; };
+		5A8EC5511A20B88600DDF077 /* ClientSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ClientSetting.m; path = CoreData/ClientSetting.m; sourceTree = "<group>"; };
 		5ADDEE861A172E41008E76EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../../../../Documents/ShuttleBus/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5ADDEE891A172F7D008E76EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../../../../Documents/ShuttleBus/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6D5132DAF31FC0505B139923 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A8EC54B1A20A90800DDF077 /* CoreData.framework in Frameworks */,
 				5A1DA82F19C41CFA002B859D /* CoreGraphics.framework in Frameworks */,
 				5A1DA83119C41CFA002B859D /* UIKit.framework in Frameworks */,
 				5A1DA82D19C41CFA002B859D /* Foundation.framework in Frameworks */,
@@ -150,6 +158,7 @@
 		5A1DA82019C41CFA002B859D = {
 			isa = PBXGroup;
 			children = (
+				5A8EC54C1A20A91900DDF077 /* coredata */,
 				5A07F4141A189A85009BB1B8 /* ClientSettingTabController.h */,
 				5A07F4151A189A85009BB1B8 /* ClientSettingTabController.m */,
 				5A07F4131A179F15009BB1B8 /* ShareObj */,
@@ -195,6 +204,7 @@
 		5A1DA82B19C41CFA002B859D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A8EC54A1A20A90800DDF077 /* CoreData.framework */,
 				5A1DA82C19C41CFA002B859D /* Foundation.framework */,
 				5A1DA82E19C41CFA002B859D /* CoreGraphics.framework */,
 				5A1DA83019C41CFA002B859D /* UIKit.framework */,
@@ -278,6 +288,16 @@
 			name = Images;
 			path = "GHSidebarNav-1.0.0/GHSidebarNav/Images";
 			sourceTree = SOURCE_ROOT;
+		};
+		5A8EC54C1A20A91900DDF077 /* coredata */ = {
+			isa = PBXGroup;
+			children = (
+				5A8EC54D1A20A94900DDF077 /* usersetting.xcdatamodeld */,
+				5A8EC5501A20B88600DDF077 /* ClientSetting.h */,
+				5A8EC5511A20B88600DDF077 /* ClientSetting.m */,
+			);
+			name = coredata;
+			sourceTree = "<group>";
 		};
 		79E45EFC9CBA85A6A4F9B053 /* Pods */ = {
 			isa = PBXGroup;
@@ -433,7 +453,9 @@
 				5A07F4111A179F0B009BB1B8 /* RestRequestor.m in Sources */,
 				5A07F4121A179F0B009BB1B8 /* ShareObject.m in Sources */,
 				5A73AD4C1A172D0A00395079 /* MenuListCell.m in Sources */,
+				5A8EC54F1A20A94900DDF077 /* usersetting.xcdatamodeld in Sources */,
 				5A73AD4D1A172D0A00395079 /* MenuListViewController.m in Sources */,
+				5A8EC5521A20B88600DDF077 /* ClientSetting.m in Sources */,
 				5A1DA89119C41EED002B859D /* GHSidebarSearchViewController.m in Sources */,
 				5A73AD511A172D0A00395079 /* ViewController.m in Sources */,
 				5A73AD4F1A172D0A00395079 /* ShuttleBusViewController.m in Sources */,
@@ -675,6 +697,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5A8EC54D1A20A94900DDF077 /* usersetting.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5A8EC54E1A20A94900DDF077 /* usersetting.xcdatamodel */,
+			);
+			currentVersion = 5A8EC54E1A20A94900DDF077 /* usersetting.xcdatamodel */;
+			path = usersetting.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5A1DA82119C41CFA002B859D /* Project object */;
 }

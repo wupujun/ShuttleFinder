@@ -58,12 +58,11 @@
 }
 
 - (void) callRestAPIAndReturnObjAsArray: (RestQueryParamter*) queryParamter  class:(Class)mappedClass  callback:(id<AsynCallCompletionNotify>) callbackObj {
-    NSLog(@"start query Shuttlebus location from server");
     
-    //delegate=callbakcObj;
+    //NSLog(@"start query Shuttlebus location from server");
+    
     
     NSString* serverIP= [RestRequestor getServerAddress];
-    //NSString* busLineURL= [NSString stringWithFormat:@"http://%@/bus/webresources/",serverIP];
     NSString* busLineURL= [NSString stringWithFormat:@"http://%@/%@",serverIP, queryParamter.uri];
     
     
@@ -105,12 +104,70 @@
                }
                failure:^(RKObjectRequestOperation *operation, NSError *error) {
                    NSLog(@"Error: %@", error);
+                   NSString* errorMsg=[NSString stringWithFormat:@"ErrorMsg=%@", error];
+                   
+                   [callbackObj reportError:errorMsg];
+                   
                    if(operation.HTTPRequestOperation.response.statusCode==200){
                        //do your processing
                    }
                }];
     
 
+}
+
+- (void) callPostAPIAndReturnObjAsArray: (RestQueryParamter*) queryParamter  class:(Class)mappedClass  callback:(id<AsynCallCompletionNotify>) callbackObj
+{
+    
+    
+    NSString* serverIP= [RestRequestor getServerAddress];
+    NSString* busLineURL= [NSString stringWithFormat:@"http://%@/%@",serverIP, queryParamter.uri];
+    
+    
+    RKObjectManager *manager =  [RKObjectManager managerWithBaseURL:[NSURL URLWithString:busLineURL]];
+    
+    [RKMIMETypeSerialization registerClass:[RKNSJSONSerialization class] forMIMEType:@"text/plain"];
+    [manager setAcceptHeaderWithMIMEType: @"*/*"];
+    //[manager setRequestSerializationMIMEType:RKMIMETypeJSON];
+    [manager setRequestSerializationMIMEType:RKMIMETypeFormURLEncoded];
+    
+    RKObjectMapping* objMapping = [RKObjectMapping mappingForClass:mappedClass];
+    [objMapping addAttributeMappingsFromDictionary:nil];//queryParamter.fieldMap];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:objMapping
+                                                                                            method:RKRequestMethodAny
+                                                                                       pathPattern:nil
+                                                                                           keyPath:@"returnObject"
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    
+    [manager addResponseDescriptor:responseDescriptor];
+    
+    
+    [manager postObject: nil
+            path:queryParamter.path
+            parameters:queryParamter.postMap
+               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                   
+                   NSLog(@"post is sucessful");
+                   
+                   NSMutableArray *busLinesArray= [NSMutableArray arrayWithArray:mappingResult.array];
+                   
+                   [callbackObj getReturnedObjectArray:busLinesArray];
+                   
+               }
+               failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                   NSLog(@"Error: %@", error);
+                   NSString* errorMsg=[NSString stringWithFormat:@"ErrorMsg=%@", error];
+                   
+                   [callbackObj reportError:errorMsg];
+                   
+                   if(operation.HTTPRequestOperation.response.statusCode==200){
+                       //do your processing
+                   }
+               }];
+
+    
 }
 
 
@@ -141,7 +198,27 @@
     [self callRestAPIAndReturnObjAsArray:queryParameter  class:[Location class] callback:callbackObj];
     
 }
-+ (bool) updateMyLocationToServer: (Location*) myLocation {
+- (bool) updateMyLocationToServer: (Location*) myLocation callback:(id<AsynCallCompletionNotify>) callbackObj{
+    
+    RestQueryParamter * queryParameter= [[RestQueryParamter alloc]init];
+    queryParameter.uri=@"bus/webresources/";
+    queryParameter.path=@"locations";
+    
+    queryParameter.fieldMap= @{
+                                @"userID": @"userID",
+                                @"longitude": @"longitude",
+                                @"latitude": @"latitude",
+                                @"time": @"time"
+                                };
+    
+    queryParameter.postMap = @ {
+        @"userID": myLocation.reportedUserID,
+        @"Lat": myLocation.latitude,
+        @"Long": myLocation.longitude
+        //@"time": myLocation.reportedTime
+    };
+    
+    [self callPostAPIAndReturnObjAsArray:queryParameter  class:[Location class] callback:callbackObj];
     
     return true;
 }

@@ -7,6 +7,7 @@
 //
 
 #import "ShareObject.h"
+#import "ClientSetting.h"
 
 @implementation ResultObject
 
@@ -62,6 +63,12 @@ static ShuttleDataStore *_instance=nil;
 
 @implementation ShuttleDataStore
 
+@synthesize managedObjectContext =_managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize locationManager=_locationManager;
+@synthesize isRunningInBackground=_isRunningInBackground;
+
 @synthesize busLines;
 
 + (id) instance{
@@ -73,11 +80,56 @@ static ShuttleDataStore *_instance=nil;
     return _instance;
 }
 
+
+- (void) saveToLocal{
+    ClientSetting *clientSetting = [NSEntityDescription insertNewObjectForEntityForName:@"ClientSetting" inManagedObjectContext:_managedObjectContext];
+   
+    clientSetting.serverIP=_clientSetting.serverIPPort;
+    clientSetting.userName=_clientSetting.userName;
+    clientSetting.interval= [NSNumber numberWithInteger:_clientSetting.freshInterval];
+    
+    NSError *error = nil;
+    if (![_managedObjectContext save:&error]) {
+        NSLog(@"%@",[error localizedDescription]);
+    }
+}
+
+- (void) loadFromLocal {
+ 
+    // Override point for customization after application launch.
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ClientSetting" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSError *error;
+    NSString *userName;
+    NSString *serverIP;
+    NSInteger freshInterval;
+    
+    NSArray *fetchObject = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    for (NSManagedObject *info in fetchObject) {
+        userName=[info valueForKey:@"userName"];
+        serverIP=[info valueForKey:@"serverIP"];
+        NSNumber *v=[info valueForKey:@"interval"];
+
+        freshInterval= v.integerValue;
+        NSLog(@"userName: %@",userName);
+        NSLog(@"serverIP:%@",serverIP);
+        NSLog(@"refresh interval:%d",freshInterval);
+    }
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    dataStore.clientSetting.serverIPPort = serverIP;
+    dataStore.clientSetting.userName= userName;
+    dataStore.clientSetting.freshInterval=freshInterval;
+    
+}
+
 - (id) init {
     
     self= [ super init];
     
     self.clientSetting = [[UserClientSetting alloc] init];
+    //self.clientSetting.serverIPPort= [ NSString stringWithFormat:<#(NSString *), ...#>]
     
     return self;
 }
@@ -98,6 +150,69 @@ static ShuttleDataStore *_instance=nil;
 {
     return self;
 }
+
+
+//support core data
+//support core data
+- (void)saveContext
+{
+    NSError *error = nil;
+    NSManagedObjectContext *managedObjectContext =self.managedObjectContext;
+    if (managedObjectContext !=nil) {
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            NSLog(@"Unresolvederror %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (_managedObjectContext !=nil) {
+        return _managedObjectContext;
+    }
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        _managedObjectContext = [[NSManagedObjectContext alloc]init];
+        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    return _managedObjectContext;
+}
+
+- (NSManagedObjectModel *)managedObjectModel
+{
+    if (_managedObjectModel !=nil) {
+        return _managedObjectModel;
+    }
+    //这里一定要注意，这里的iWeather就是你刚才建立的数据模型的名字，一定要一致。否则会报错。
+    NSURL *modelURL = [[NSBundle mainBundle]URLForResource:@"usersetting" withExtension:@"momd"];
+    _managedObjectModel = [[NSManagedObjectModel alloc]initWithContentsOfURL:modelURL];
+    return _managedObjectModel;
+}
+
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+    if (_persistentStoreCoordinator !=nil) {
+        return _persistentStoreCoordinator;
+    }
+    //这里的iWeaher.sqlite，也应该与数据模型的名字保持一致。
+    NSURL *storeURL = [[self applicationDocumentsDirectory]URLByAppendingPathComponent:@"usersetting.sqlite"];
+    
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]initWithManagedObjectModel:[self managedObjectModel]];
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        NSLog(@"Unresolvederror %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _persistentStoreCoordinator;
+}
+- (NSURL*)applicationDocumentsDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask]lastObject];
+}
+
 
 @end
 

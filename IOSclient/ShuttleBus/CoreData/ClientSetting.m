@@ -12,7 +12,7 @@
 @implementation ClientSetting
 
 @dynamic serverIP;
-@dynamic port;
+@dynamic interval;
 @dynamic userName;
 @dynamic shuttleLine;
 

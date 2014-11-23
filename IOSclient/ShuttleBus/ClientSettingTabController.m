@@ -123,5 +123,6 @@
     [checkEndTime resignFirstResponder];
     [checkStartTime resignFirstResponder];
     [_checkIntervalInMin resignFirstResponder];
+    [_serverIPLable resignFirstResponder];
 }
 @end

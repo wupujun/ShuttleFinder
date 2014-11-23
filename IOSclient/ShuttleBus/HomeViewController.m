@@ -1,10 +1,11 @@
-//
 //  HomeViewController.m
 //  ShuttleBus
 //
 //  Created by LiuWeiMac on 8/16/14.
 //  Copyright (c) 2014 TR. All rights reserved.
 //
+
+#import "CoreData/ClientSetting.h"
 
 #import "HomeViewController.h"
 #import "ClientSettingTabController.h"
@@ -14,6 +15,7 @@
 
 @interface HomeViewController () {
     ClientSettingTabController *_clientSettingView;
+    NSManagedObjectContext *_context;
 }
 
 @end
@@ -39,7 +41,17 @@
     UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
     tapGr.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapGr];
-}
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    _clientSettingView.serverIPLable.text =dataStore.clientSetting.serverIPPort;
+    _clientSettingView.userNameLabel.text = dataStore.clientSetting.userName;
+    _clientSettingView.checkIntervalInMin.text=[NSString stringWithFormat:@"%d", dataStore.clientSetting.freshInterval];
+    //NSInteger freshInterview=[ floatValue]*1;
+    
+    
+ }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -58,19 +70,28 @@
 }
 */
 - (IBAction)showLeftMenu:(id)sender {
+    
+    //id menuController=[self valueForKey:@"KeyForMenuRefresh"];
+    
+    //[menuController performSelector:@selector(refreshMenu)];
+
     [self.revealController toggleSidebar:!self.revealController.sidebarShowing duration:kGHRevealSidebarDefaultAnimationDuration];
 }
 
 - (IBAction)applySettingButtonClick:(id)sender {
     NSString* ipAddress= _clientSettingView.serverIPLable.text;
-    NSInteger freshInterview=[_clientSettingView.checkIntervalInMin.text floatValue]*60;
+    NSInteger freshInterview=[_clientSettingView.checkIntervalInMin.text floatValue]*1;
     
     ShuttleDataStore* dataStore=[ShuttleDataStore instance];
     
     NSLog(@"change server ip/port from %@ to %@",dataStore.clientSetting.serverIPPort, ipAddress);
-    NSLog(@"change server ip/port from %d to %d",dataStore.clientSetting.freshInterval, freshInterview);
+    NSLog(@"fresh frequenct from %d to %d",dataStore.clientSetting.freshInterval, freshInterview);
     dataStore.clientSetting.serverIPPort = ipAddress;
     dataStore.clientSetting.freshInterval = freshInterview;
+    
+    [dataStore saveToLocal];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ServerIPChangeMsg" object:self];
     
 }
 

@@ -10,6 +10,15 @@
 #import <MapKit/MKMapView.h>
 #import "MapKit/MapKit.h"
 
+#import <CoreData/NSRelationshipDescription.h>
+#import <CoreData/NSManagedObjectModel.h>
+#import <CoreData/NSPersistentStoreCoordinator.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSManagedObject.h>
+
+
 //define the return object
 
 @interface ResultObject : NSObject
@@ -82,5 +91,15 @@
 
 @property (strong,nonatomic) NSMutableArray* busLines;
 @property (strong,nonatomic) UserClientSetting * clientSetting;
+
+@property (readonly,strong,nonatomic)NSManagedObjectContext *managedObjectContext;
+@property (readonly,strong,nonatomic)NSManagedObjectModel *managedObjectModel;
+@property (readonly,strong,nonatomic)NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (strong,nonatomic) CLLocationManager *locationManager;
+@property (nonatomic) BOOL isRunningInBackground;
+
+- (void) saveToLocal;
+- (void) loadFromLocal;
 +(id) instance;
 @end

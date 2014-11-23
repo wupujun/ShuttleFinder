@@ -38,9 +38,16 @@ public class LocationResource {
 		 
      
 	 ResultObject result= new ResultObject();
-	 List<Location> locations = DataStore.instance().getLocations();	 
+	 List<Location> locations = DataStore.instance().getLocations();	
+	 
+	 int lastPos= locations.size()-1;
+	 int firstPos= (lastPos-10>0)? lastPos-10:0;
+	 if (lastPos<0) lastPos=0;
+	 
+	 List<Location> last10Locations= new ArrayList<Location> (locations.subList(firstPos,lastPos)); 
+	 
 	 result.dataType=ResultObject.DATATYPE.ARRAY;
-	 result.returnObject=locations;
+	 result.returnObject=last10Locations;
 	 result.status=ResultObject.STATUS.OK;
 	 
      return result;

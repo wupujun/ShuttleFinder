@@ -8,11 +8,22 @@
 
 #import "AppDelegate.h"
 
+
+#import "ShareObject.h"
+
 @implementation AppDelegate
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    [dataStore loadFromLocal];
+//    dataStore.clientSetting.serverIPPort = serverIP;
+//    dataStore.clientSetting.userName= userName;
+
+    
     return YES;
 }
 							
@@ -26,6 +37,22 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    dataStore.isRunningInBackground=true;
+    
+    if ([CLLocationManager significantLocationChangeMonitoringAvailable])
+    {
+        // Stop normal location updates and start significant location change updates for battery efficiency.
+
+        [[dataStore locationManager] stopUpdatingLocation];
+        [[dataStore locationManager] startMonitoringSignificantLocationChanges];
+        NSLog(@"change as background update mode!");
+
+    }
+    else
+    {
+        NSLog(@"Significant location change monitoring is not available.");
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -36,11 +63,29 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    dataStore.isRunningInBackground = false;
+    if ([CLLocationManager significantLocationChangeMonitoringAvailable])
+    {
+        // Stop significant location updates and start normal location updates again since the app is in the forefront.
+        [[dataStore locationManager] stopMonitoringSignificantLocationChanges];
+        [[dataStore locationManager] startUpdatingLocation];
+        NSLog(@"change as frondend update mode!");
+        
+    }
+    else
+    {
+        NSLog(@"Significant location change monitoring is not available.");
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
 
 @end

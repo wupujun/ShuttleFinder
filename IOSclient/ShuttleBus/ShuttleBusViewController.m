@@ -8,8 +8,7 @@
 
 #import "ShuttleBusViewController.h"
 #import "MarkPoint.h"
-
-
+#import "ShareObject.h"
 
 
 @interface ShuttleBusViewController ()
@@ -43,25 +42,40 @@
     
     [self.mapView setDelegate:self];
     [self.mapView setShowsUserLocation:YES];
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];//创建位置管理器
+    
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    
+    CLLocationManager *locationManager = dataStore.locationManager;
+    if (locationManager==nil)
+        dataStore.locationManager= [[CLLocationManager alloc] init];//创建位置管理器
+    
+    locationManager = dataStore.locationManager;
+    
     locationManager.delegate=self;//设置代理
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;//指定需要的精度级别
-    locationManager.distanceFilter=kCLDistanceFilterNone;//设置距离筛选器
+    //locationManager.distanceFilter=kCLDistanceFilterNone;//设置距离筛选器
+    locationManager.distanceFilter = 10;
+    
+    //[locationManager requestWhenInUseAuthorization];
+    
     [locationManager startUpdatingLocation];//启动位置管理器
     
     [mapView setZoomEnabled:YES];
     [mapView setScrollEnabled:YES];
-    
+    //mapView.userTrackingMode = MKUserTrackingModeFollowWithHeading;
+    //[mapView setShowsUserLocation:YES];
+
     isQueryInprogress=false;
     
-    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    
     NSInteger checkInterval= dataStore.clientSetting.freshInterval;
     
     if (checkInterval<=0) checkInterval=60;
     
     [self performSelector:@selector(queryShuttleLocation) withObject:nil afterDelay:checkInterval ];
-    //shuttleQuerytimer =  [NSTimer scheduledTimerWithTimeInterval:checkInterval target:self selector:@selector(queryShuttleLocation) userInfo:nil repeats:YES];
-    //每1秒运行一次function方法。
 }
 
 - (void)didReceiveMemoryWarning
@@ -70,13 +84,22 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
-    CLLocationCoordinate2D loc = [userLocation coordinate];
-    //放大地图到自身的经纬度位置。
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(loc, 250, 250);
-    self.longitudeValue = loc.longitude;
-    self.latitudeValue = loc.latitude;
-    [self.mapView setRegion:region animated:YES];
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *location=[locations firstObject];
+    CLLocationCoordinate2D loc = [location coordinate];
+ 
+    NSLog(@"update location (%f,%f)", loc.longitude,loc.latitude);
+  
+    RestRequestor * req= [[RestRequestor alloc] init];
+    Location* aLoc=[[Location alloc] init];
+    aLoc.longitude=[NSString stringWithFormat:@"%f",loc.longitude];
+    aLoc.latitude=[NSString stringWithFormat:@"%f",loc.latitude];
+    aLoc.reportedUserID= @"user1";
+    aLoc.reportedTime=@"00:00:00";
+
+    [req updateMyLocationToServer:aLoc callback:self];
+
 }
 
 /*
@@ -121,10 +144,14 @@
     [req getReportedBusLineLocation:@""  callback:self];
 }
 
+- (void) reportError:(NSString *)errorMsg {
+    NSLog(@"REST API call failed, error=%@",errorMsg);
+}
+
 
 - (NSInteger) getReturnedObjectArray: (NSArray*) objectArray {
     
-    
+    if (objectArray==nil || objectArray.count<1) return 0;
     
     Location *lastPos=objectArray.lastObject;
     NSLog(@"lat=%@,long=%@", lastPos.latitude,lastPos.longitude);

@@ -9,11 +9,15 @@
 #import "ViewController.h"
 #import "MenuListViewController.h"
 
+#import "ShareObj/ShareObject.h"
+
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
+
+@synthesize loginUserName;
 
 - (void)viewDidLoad
 {
@@ -32,6 +36,9 @@
     MenuListViewController* menuVc = [self.storyboard instantiateViewControllerWithIdentifier:@"MenuListViewController"];
     NSLog(@"instantiateViewControllerWithIdentifier: %@", menuVc);
     if (nil==menuVc) return;
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    dataStore.clientSetting.userName= self.loginUserName.text;
     
     // 直接模态弹出菜单页面（已废弃，仅用于调试）.
     if (NO) {
