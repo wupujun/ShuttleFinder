@@ -59,30 +59,31 @@ public class LocationResource {
  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
  public ResultObject newLocation(
 		   @FormParam("userID") String userID,
-		   @FormParam("Lat") String Lat,
-		   @FormParam("Long") String Long,
+		   @FormParam("latitude") double latitude,
+		   @FormParam("longitude") double longitude,
+		   @FormParam("altitude") double altitude,
+		   @FormParam("time") String time,
+		   @FormParam("line") String line,
+		   
+		   
 		   @Context HttpServletResponse response
 		   ) throws IOException 
 		   {
 	 			ResultObject result= new ResultObject();
 
-	 			ArrayList<Location> locations=DataStore.instance().getLocations();
-  				Location aLocation=new Location();
-	 			aLocation.setLatitude(Lat);
-	 			aLocation.setLongitude(Long);
-	 			aLocation.setUserID(userID);
 	 			
-	 			Date nowTime=new Date(); 
-	 			System.out.println(nowTime); 
-	 			SimpleDateFormat time=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-	 			String timeString=time.format(nowTime); 
-	 			
-	 			aLocation.setTime(timeString);
+	 			ArrayList<Location> locations=DataStore.instance().getLocationMap().get(line);
+
+	 			Location aLocation=new Location();
+	 			aLocation.latitude=latitude;
+	 			aLocation.longitude=longitude;
+	 			aLocation.userID=userID;
+	 			aLocation.altitude=altitude;
+	 			aLocation.time=time;
+	 			//System.out.println(aLocation.toString());
 	 			locations.add(aLocation);
 	 			
-	 			
-	 		
-	 			
+	 				
 	 			result.dataType=ResultObject.DATATYPE.ARRAY;
 	 			result.returnObject=locations;
 

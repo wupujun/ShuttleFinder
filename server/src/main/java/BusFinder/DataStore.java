@@ -105,7 +105,11 @@ public class DataStore {
 
 	}
 	
-	private DataStore(){}
+	private DataStore(){
+		
+		this.buslinesMap= new HashMap<String,BusLine>();
+		this.userMap= new HashMap<String,User>();
+	}
 	
 	private static DataStore instance=null;
 	
@@ -178,8 +182,9 @@ public class DataStore {
 	}
 	
 	public void clear() {
-		instance.setBuslinesMap(null);
-		instance.setUsers(null);
+		instance.setBuslinesMap(new HashMap<String,BusLine>() );
+		instance.setUsers(new HashMap<String,User>() );
+		
 	}
 	
 	//getter&setter
@@ -203,11 +208,14 @@ public class DataStore {
 	public void setBuslinesMap(HashMap<String,BusLine> buslinesMap) {
 		this.buslinesMap = buslinesMap;
 	}
+	
+	
 
 	//data accessor
 	private HashMap<String,User> userMap= new HashMap<String,User>();
 	private HashMap<String,BusLine> buslinesMap = new HashMap<String,BusLine>();
-	private ArrayList<Location> locations= new ArrayList<Location>();
+	//private ArrayList<Location> locations= new ArrayList<Location>();
+	private HashMap<String,ArrayList<Location>> locationMap= new HashMap<String,ArrayList<Location>> ();
 	//test method
 	static void main()
 	{
@@ -217,15 +225,14 @@ public class DataStore {
 
 
 
-
-	public ArrayList<Location> getLocations() {
-		return locations;
+	public HashMap<String,ArrayList<Location>> getLocationMap() {
+		return locationMap;
 	}
 
 
 
 
-	public void setLocations(ArrayList<Location> locations) {
-		this.locations = locations;
+	public void setLocationMap(HashMap<String,ArrayList<Location>> locationMap) {
+		this.locationMap = locationMap;
 	}
 }

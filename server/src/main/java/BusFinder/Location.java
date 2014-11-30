@@ -9,40 +9,20 @@ import javax.xml.bind.annotation.XmlAccessType;
 import org.apache.derby.client.am.DateTime;
 
 @XmlRootElement
-
-
+/*
+interface BusLocationInfo : NSObject
+{
+    double longitude;
+    double latitude;
+    double altitude;
+    NSString* time; // Format: 2011-08-26 05:41:06 +0000
+    NSString* userId;
+}*/
 public class Location {
 
-	private String latitude;
-	private String longitude;
-	private String userID;
-	private String time;
-	
-	//getter&setter
-	public String getLatitude() {
-		return latitude;
-	}
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-	public String getLongitude() {
-		return longitude;
-	}
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-	public String getUserID() {
-		return userID;
-	}
-	public void setUserID(String userID) {
-		this.userID = userID;
-	}
-
-	public String getTime() {
-		return time;
-	}
-	public void setTime(String timeString) {
-		this.time = timeString;
-	}
-	
+	public double latitude;
+	public double longitude;
+	public double altitude;
+	public String userID;
+	public String time;	
 }

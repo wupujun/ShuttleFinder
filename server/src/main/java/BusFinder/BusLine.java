@@ -9,8 +9,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 
 
 public class BusLine {
-	public String lineID;
+	public String busLine;
+	public int seatCount;
+	public String license;
+	public String driver;
+	public String phone;
+	/*
 	public String lineName;
 	public String driverName;
 	public String driverNo;
+	*/
 }

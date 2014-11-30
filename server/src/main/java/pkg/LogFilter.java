@@ -34,14 +34,14 @@ public class LogFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		HttpServletRequest request = (HttpServletRequest) req;
+		//HttpServletRequest request = (HttpServletRequest) req;
 		// Get the IP address of client machine
 		//String ipAddress = request.getRemoteAddr();
 		// Log the IP address and current timestamp
 		//System.out
 		//	.println("IP " + ipAddress + ",Time " + new Date().toString());
 		
-		chain.doFilter(request,res);
+		chain.doFilter(req,res);
 	}
 
 	@Override

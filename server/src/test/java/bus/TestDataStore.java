@@ -29,11 +29,22 @@ public class TestDataStore {
 		
 		HashMap<String,BusLine> busLines = new HashMap<String,BusLine>();
 		BusLine line1= new BusLine();
-		line1.driverName="driver1";
-		line1.driverNo="driverNo1";
-		line1.lineName="Line No.1";
-		busLines.put("line1", line1);
-		busLines.put("line2", new BusLine());
+		line1.busLine= "busline1";
+		line1.driver = "陈师傅";
+		line1.license = "京NB001";
+		line1.phone="13810001234";
+		line1.seatCount=40;
+
+		BusLine line2= new BusLine();
+		line2.busLine="busline1";
+		line2.driver="李师傅";
+		line2.license="京NB002";
+		line2.phone="18610001234";
+		line2.seatCount=39;
+
+		
+		busLines.put("busline1", line1);
+		busLines.put("busline2", line2);
 		
 		DataStore.instance().setUsers(userMap);
 		DataStore.instance().setBuslinesMap(busLines);
@@ -49,7 +60,7 @@ public class TestDataStore {
 		Assert.assertTrue(DataStore.instance().getBuslinesMap().size()==2);
 		Assert.assertTrue(DataStore.instance().getUsers().size()==3);	
 				
-		String lineClass=DataStore.instance().getBuslinesMap().get("line1").getClass().toString();
+		String lineClass=DataStore.instance().getBuslinesMap().get("busline1").getClass().toString();
 		String userClass=DataStore.instance().getUsers().get("1").getClass().toString();
 		
 		System.out.println("LineClass="+lineClass+",userClass="+userClass);

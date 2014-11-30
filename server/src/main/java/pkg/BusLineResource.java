@@ -48,18 +48,23 @@ public class BusLineResource {
  @Produces(MediaType.TEXT_HTML)
  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
  public void newBusLine(
-		   @FormParam("lineID") String id,
-		   @FormParam("lineName") String name,
-		   @FormParam("driverName") String driverName,
+		   @FormParam("busLine") String busLine,
+		   @FormParam("seatCount") Integer seatCount,
+		   @FormParam("license") String license,
+		   @FormParam("driver") String driver,
+		   @FormParam("phone") String phone,
 		   @Context HttpServletResponse response
 		   ) throws IOException 
 		   {
 	 			HashMap<String,BusLine> busLineMap=DataStore.instance().getBuslinesMap();
   				BusLine aLine=new BusLine();
-	 			aLine.driverName=driverName;
-	 			aLine.lineName=name;
-	 			aLine.lineID=id;
-	 			busLineMap.put(id, aLine);
+	 			aLine.busLine = busLine; 
+	 			aLine.driver=driver;
+	 			aLine.license=license;
+	 			aLine.phone=phone;
+	 			aLine.seatCount=seatCount;
+	 			
+	 			busLineMap.put(busLine, aLine);
 	 			
 		   }
 		   
