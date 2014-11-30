@@ -109,6 +109,7 @@ public class DataStore {
 		
 		this.buslinesMap= new HashMap<String,BusLine>();
 		this.userMap= new HashMap<String,User>();
+		this.locationMap= new HashMap<String,ArrayList<Location>>();
 	}
 	
 	private static DataStore instance=null;

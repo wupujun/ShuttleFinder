@@ -17,6 +17,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -33,23 +34,35 @@ public class LocationResource {
 	 @GET
      @Produces("application/json")
      //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-     public ResultObject getLocations() {
+     public ResultObject getLocations(
+    		 
+    		 @QueryParam("line") String lineID
+    		 ) {
      
 		 
      
-	 ResultObject result= new ResultObject();
-	 List<Location> locations = DataStore.instance().getLocations();	
-	 
-	 int lastPos= locations.size()-1;
-	 int firstPos= (lastPos-10>0)? lastPos-10:0;
-	 if (lastPos<0) lastPos=0;
-	 
-	 List<Location> last10Locations= new ArrayList<Location> (locations.subList(firstPos,lastPos)); 
-	 
-	 result.dataType=ResultObject.DATATYPE.ARRAY;
-	 result.returnObject=last10Locations;
-	 result.status=ResultObject.STATUS.OK;
-	 
+	ResultObject result= new ResultObject();
+	List<Location> locations = DataStore.instance().getLocationMap().get(lineID);	
+		 
+	if (locations!=null) {
+			 
+		 int lastPos= locations.size()-1;
+		 int firstPos= (lastPos-10>0)? lastPos-10:0;
+		 if (lastPos<0) lastPos=0;
+		 
+		 List<Location> last10Locations= new ArrayList<Location> (locations.subList(firstPos,lastPos)); 
+		 
+		 result.dataType=ResultObject.DATATYPE.ARRAY;
+		 result.returnObject=last10Locations;
+		 result.status=ResultObject.STATUS.OK;
+	}
+	else {
+		 result.dataType=ResultObject.DATATYPE.OBJECT;
+		 result.errorMsg="Can't find line:"+lineID;
+		 result.status=ResultObject.STATUS.ERROR;
+
+	}
+	
      return result;
 }
  
@@ -73,7 +86,11 @@ public class LocationResource {
 
 	 			
 	 			ArrayList<Location> locations=DataStore.instance().getLocationMap().get(line);
-
+	 			if(locations==null) {
+	 				DataStore.instance().getLocationMap().put(line, new ArrayList<Location>());
+	 			}
+	 			locations=DataStore.instance().getLocationMap().get(line);
+	 			
 	 			Location aLocation=new Location();
 	 			aLocation.latitude=latitude;
 	 			aLocation.longitude=longitude;
@@ -84,13 +101,19 @@ public class LocationResource {
 	 			locations.add(aLocation);
 	 			
 	 				
-	 			result.dataType=ResultObject.DATATYPE.ARRAY;
-	 			result.returnObject=locations;
-
+	 			
 	 			result.dataType=ResultObject.DATATYPE.ARRAY;
 	 			result.returnObject=locations;
 	 			result.status=ResultObject.STATUS.OK;
+
 	 			
+ 				/*else {
+	 				 result.dataType=ResultObject.DATATYPE.OBJECT;
+	 				 //result.returnObject="Can't find line:"+line;
+	 				 result.errorMsg="Can't find line:"+line;
+	 				 result.status=ResultObject.STATUS.ERROR;	
+	 			}*/
+	 				
 	 			return result;
 	 			
 		   }
