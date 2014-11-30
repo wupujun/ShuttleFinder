@@ -86,10 +86,19 @@ public class LocationResource {
 
 	 			
 	 			ArrayList<Location> locations=DataStore.instance().getLocationMap().get(line);
+	 			
+
+	 			
 	 			if(locations==null) {
 	 				DataStore.instance().getLocationMap().put(line, new ArrayList<Location>());
+	 				locations=DataStore.instance().getLocationMap().get(line);
 	 			}
-	 			locations=DataStore.instance().getLocationMap().get(line);
+	 			else {
+		 			if(locations.size()>1000) {
+		 				locations.clear();
+		 			}
+	 			}
+	 			
 	 			
 	 			Location aLocation=new Location();
 	 			aLocation.latitude=latitude;
@@ -101,9 +110,10 @@ public class LocationResource {
 	 			locations.add(aLocation);
 	 			
 	 				
-	 			
+	 			ArrayList<Location> locs=new ArrayList<Location>();
+	 			locs.add(aLocation);
 	 			result.dataType=ResultObject.DATATYPE.ARRAY;
-	 			result.returnObject=locations;
+	 			result.returnObject=locs;
 	 			result.status=ResultObject.STATUS.OK;
 
 	 			
