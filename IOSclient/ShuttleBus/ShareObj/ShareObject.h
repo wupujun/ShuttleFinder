@@ -18,6 +18,7 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObject.h>
 
+#import "ShuttleAPI.h"
 
 //define the return object
 
@@ -31,6 +32,7 @@
 @end
 
 //define loation object
+/*
 @interface Location : NSObject
 @property (strong,nonatomic) NSString* latitude;
 @property (strong,nonatomic) NSString* longitude;
@@ -38,10 +40,10 @@
 @property (strong,nonatomic) NSString* reportedTime;
 @property (strong,nonatomic) NSString* locationName;
 
-@end
+@end*/
 
 //define BusLine object
-
+/*
 @interface BusLine: NSObject
 
 @property (strong,nonatomic) NSString* driverName;
@@ -50,6 +52,8 @@
 @property (strong,nonatomic) Location* lastLocation;
 
 @end
+*/
+
 
 //Bus stop
 @interface ShuttleStop: NSObject
@@ -103,3 +107,7 @@
 - (void) loadFromLocal;
 +(id) instance;
 @end
+
+
+
+

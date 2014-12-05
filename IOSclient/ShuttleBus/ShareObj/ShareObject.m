@@ -16,22 +16,7 @@
 
 @end
 
-@implementation Location
-
-@synthesize longitude,latitude,reportedTime,reportedUserID;
-
-@end
-
-
-
-@implementation BusLine
-
-@synthesize driverName,lineName, stopList;
-
-
-
-
-@end
+ 
 
 @implementation MyLocation
 
@@ -87,6 +72,7 @@ static ShuttleDataStore *_instance=nil;
     clientSetting.serverIP=_clientSetting.serverIPPort;
     clientSetting.userName=_clientSetting.userName;
     clientSetting.interval= [NSNumber numberWithInteger:_clientSetting.freshInterval];
+    clientSetting.shuttleLine=_clientSetting.lineID;
     
     NSError *error = nil;
     if (![_managedObjectContext save:&error]) {
@@ -104,23 +90,27 @@ static ShuttleDataStore *_instance=nil;
     NSString *userName;
     NSString *serverIP;
     NSInteger freshInterval;
+    NSString* lineID;
     
     NSArray *fetchObject = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     for (NSManagedObject *info in fetchObject) {
         userName=[info valueForKey:@"userName"];
         serverIP=[info valueForKey:@"serverIP"];
         NSNumber *v=[info valueForKey:@"interval"];
+        lineID=[info valueForKey:@"shuttleLine"];
 
         freshInterval= v.integerValue;
         NSLog(@"userName: %@",userName);
         NSLog(@"serverIP:%@",serverIP);
         NSLog(@"refresh interval:%d",freshInterval);
+        NSLog(@"shuttleLine:%@",lineID);
     }
     
     ShuttleDataStore* dataStore=[ShuttleDataStore instance];
     dataStore.clientSetting.serverIPPort = serverIP;
     dataStore.clientSetting.userName= userName;
     dataStore.clientSetting.freshInterval=freshInterval;
+    dataStore.clientSetting.lineID=lineID;
     
 }
 

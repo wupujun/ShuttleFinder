@@ -10,6 +10,7 @@
 #import <RestKit/RestKit.h>
 
 #import "ShareObject.h"
+#import "ShuttleAPI.h"
 
 @protocol AsynCallCompletionNotify <NSObject>
 
@@ -21,26 +22,29 @@
 @interface RestQueryParamter:NSObject
 
 @property(nonatomic,strong) NSString* uri;
+@property(nonatomic,strong) NSString* serverURL;
 @property(strong,nonatomic) NSString* path;
 @property(strong,nonatomic) NSDictionary * fieldMap;
 @property(strong,nonatomic) NSDictionary * postMap;
+@property(strong,nonatomic) NSDictionary * getMap;
 @end
 
-@interface RestRequestor : NSObject
-
+@interface RestRequestor : NSObject {
+    NSString* _serverURL;
+}
 
 @property (retain,nonatomic) id<AsynCallCompletionNotify> delegate;
 
 //remote mothods
-- (void) getBusLineList : (id<AsynCallCompletionNotify>) callbakcObj;
-- (void) getReportedBusLineLocation: (NSString*) lineID callback:(id<AsynCallCompletionNotify>) callbakcObj;
-- (bool) updateMyLocationToServer: (Location*) myLocation callback:(id<AsynCallCompletionNotify>) callbackObj;
-- (void) callRestAPIAndReturnObjAsArray: (RestQueryParamter*)queryParamter  class:(Class)mappedClass  callback:(id<AsynCallCompletionNotify>) callbackObj;
+- (void) getReportedBusLineLocation: (NSString*) lineID callback:(void(^) (NSArray*, bool) ) callbackFun;
+- (bool) updateMyLocationToServer:(NSString*) line location:(BusLocationInfo*) myLocation callback:(void(^) (NSArray*, bool) ) callbackFun;
 
+//remote motheds with bloack for callback
+- (void) getAllBusline: (void (^)(NSArray* objArray,bool)) callbackFun;
 
 //local methods
-+ (NSString*) getServerAddress;
-- (bool) setServerAddress: (NSString*) serverIP;
+- (NSString*) getServerURL;
+- (bool) setServerURL: (NSString*) serverURL;
 
 
 @end

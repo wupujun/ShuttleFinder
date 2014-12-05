@@ -138,8 +138,16 @@
     
     
     [lineLoadingIcon startAnimating];
+    
+    void (^callbackFun) (NSArray*,bool)= ^ (NSArray* arrayObject,bool isError) {
+        if (isError) {
+            NSLog(@"failed to query location, err=%@",arrayObject.firstObject);
+        }
+        else
+            [self fillBusLinesInfo: arrayObject];
+    };
     RestRequestor* requstor= [[RestRequestor alloc]init];
-    [requstor getBusLineList:self];
+    [requstor getAllBusline:callbackFun];
     
 }
 - (void) reportError:(NSString *)errorMsg {
@@ -200,10 +208,10 @@
     NSMutableArray* infoArray = [[NSMutableArray alloc]init];
     NSMutableArray* ctlArray= [[NSMutableArray alloc]init];
     
-    for ( BusLine* busline in arrayObject) {
+    for ( BusInfo* busline in arrayObject) {
         
         [infoArray addObject:
-         @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(busline.lineName, @"")}
+         @{kSidebarCellImageKey: [UIImage imageNamed:@"user.png"], kSidebarCellTextKey: NSLocalizedString(busline->busLine, @"")}
          ];
         
         [ctlArray addObject:
@@ -280,6 +288,16 @@
 			if ([controller isKindOfClass:UIViewController.class]) {
 				rt = YES;
 				revealController.contentViewController = controller;
+                
+                NSDictionary *info = _cellInfos[indexPath.section][indexPath.row];
+                NSString* lineName = info[kSidebarCellTextKey];
+                
+                if (![lineName isEqualToString:@"Home"] && ![lineName isEqualToString:@"Logout"]) {
+                    ShuttleDataStore *store= [ShuttleDataStore instance];
+                    store.clientSetting.lineID=lineName;
+                    NSLog(@"change the current lineID as %@",lineName);
+                }
+                
 				if (hideSidebar) {
 					[revealController toggleSidebar:NO duration:kGHRevealSidebarDefaultAnimationDuration];
 				}
@@ -370,7 +388,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self onSelectRowAtIndexPath:indexPath hideSidebar:YES];
-	NSLog(@"didSelectRowAtIndexPath: %@", revealController.contentViewController);
+	//NSLog(@"didSelectRowAtIndexPath: %@", revealController.contentViewController);
 }
 
 

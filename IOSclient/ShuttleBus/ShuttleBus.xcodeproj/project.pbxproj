@@ -41,6 +41,8 @@
 		5A8EC54B1A20A90800DDF077 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A8EC54A1A20A90800DDF077 /* CoreData.framework */; };
 		5A8EC54F1A20A94900DDF077 /* usersetting.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A8EC54D1A20A94900DDF077 /* usersetting.xcdatamodeld */; };
 		5A8EC5521A20B88600DDF077 /* ClientSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8EC5511A20B88600DDF077 /* ClientSetting.m */; };
+		5A9812E11A28AF7C0060D0AD /* ShuttleAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A9812E01A28AF7C0060D0AD /* ShuttleAPI.m */; };
+		5A9812E31A28B40A0060D0AD /* testShuttleAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A9812E21A28B40A0060D0AD /* testShuttleAPI.m */; };
 		5ADDEE871A172E41008E76EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5ADDEE851A172E41008E76EB /* InfoPlist.strings */; };
 		5ADDEE8A1A172F7D008E76EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5ADDEE881A172F7D008E76EB /* Main.storyboard */; };
 		AEB72F03C9884E54A4AE8CD1 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5132DAF31FC0505B139923 /* libPods.a */; };
@@ -113,6 +115,9 @@
 		5A8EC54E1A20A94900DDF077 /* usersetting.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = usersetting.xcdatamodel; sourceTree = "<group>"; };
 		5A8EC5501A20B88600DDF077 /* ClientSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClientSetting.h; path = CoreData/ClientSetting.h; sourceTree = "<group>"; };
 		5A8EC5511A20B88600DDF077 /* ClientSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ClientSetting.m; path = CoreData/ClientSetting.m; sourceTree = "<group>"; };
+		5A9812DF1A28AF7C0060D0AD /* ShuttleAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShuttleAPI.h; sourceTree = "<group>"; };
+		5A9812E01A28AF7C0060D0AD /* ShuttleAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShuttleAPI.m; sourceTree = "<group>"; };
+		5A9812E21A28B40A0060D0AD /* testShuttleAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = testShuttleAPI.m; sourceTree = "<group>"; };
 		5ADDEE861A172E41008E76EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../../../../Documents/ShuttleBus/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5ADDEE891A172F7D008E76EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../../../../Documents/ShuttleBus/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6D5132DAF31FC0505B139923 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +156,8 @@
 				5A07F40E1A179F0B009BB1B8 /* RestRequestor.m */,
 				5A07F40F1A179F0B009BB1B8 /* ShareObject.h */,
 				5A07F4101A179F0B009BB1B8 /* ShareObject.m */,
+				5A9812DF1A28AF7C0060D0AD /* ShuttleAPI.h */,
+				5A9812E01A28AF7C0060D0AD /* ShuttleAPI.m */,
 			);
 			name = ShareObj;
 			sourceTree = "<group>";
@@ -184,6 +191,7 @@
 				5A73AD431A172D0A00395079 /* SideMenuUtil.m */,
 				5A73AD441A172D0A00395079 /* ViewController.h */,
 				5A73AD451A172D0A00395079 /* ViewController.m */,
+				5A1DA84C19C41CFA002B859D /* Supporting Files */,
 				5A1DA83219C41CFA002B859D /* ShuttleBus */,
 				5A1DA84B19C41CFA002B859D /* ShuttleBusTests */,
 				5A1DA82B19C41CFA002B859D /* Frameworks */,
@@ -244,7 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				5A1DA85119C41CFA002B859D /* ShuttleBusTests.m */,
-				5A1DA84C19C41CFA002B859D /* Supporting Files */,
+				5A9812E21A28B40A0060D0AD /* testShuttleAPI.m */,
 			);
 			path = ShuttleBusTests;
 			sourceTree = "<group>";
@@ -256,6 +264,7 @@
 				5A1DA84E19C41CFA002B859D /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			path = ShuttleBusTests;
 			sourceTree = "<group>";
 		};
 		5A1DA85D19C41D2B002B859D /* Base.lproj */ = {
@@ -463,6 +472,7 @@
 				5A73AD501A172D0A00395079 /* SideMenuUtil.m in Sources */,
 				5A73AD481A172D0A00395079 /* HomeViewController.m in Sources */,
 				5A73AD4B1A172D0A00395079 /* MarkPoint.m in Sources */,
+				5A9812E11A28AF7C0060D0AD /* ShuttleAPI.m in Sources */,
 				5A07F4161A189A85009BB1B8 /* ClientSettingTabController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -471,6 +481,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A9812E31A28B40A0060D0AD /* testShuttleAPI.m in Sources */,
 				5A1DA85219C41CFA002B859D /* ShuttleBusTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

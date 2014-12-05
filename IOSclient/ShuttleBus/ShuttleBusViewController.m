@@ -9,7 +9,7 @@
 #import "ShuttleBusViewController.h"
 #import "MarkPoint.h"
 #import "ShareObject.h"
-
+//#import "ShuttleAPI.h"
 
 @interface ShuttleBusViewController ()
 {
@@ -90,15 +90,39 @@
     CLLocationCoordinate2D loc = [location coordinate];
  
     NSLog(@"update location (%f,%f)", loc.longitude,loc.latitude);
-  
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    NSString* line=dataStore.clientSetting.lineID;
+    
     RestRequestor * req= [[RestRequestor alloc] init];
-    Location* aLoc=[[Location alloc] init];
-    aLoc.longitude=[NSString stringWithFormat:@"%f",loc.longitude];
-    aLoc.latitude=[NSString stringWithFormat:@"%f",loc.latitude];
-    aLoc.reportedUserID= @"user1";
-    aLoc.reportedTime=@"00:00:00";
+    BusLocationInfo* aLoc=[[BusLocationInfo alloc] init];
+    aLoc->longitude=loc.longitude;
+    aLoc->latitude=loc.latitude;
+    aLoc->userID= dataStore.clientSetting.userName;
+    
+    NSDate *date = [NSDate date];
+    NSTimeInterval sec = [date timeIntervalSince1970];
+    NSDate *epochNSDate = [[NSDate alloc] initWithTimeIntervalSince1970:sec];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *ct =[dateFormatter stringFromDate:epochNSDate];
+    aLoc->time=ct;
+    
+    void (^callback) (NSArray* ,bool )= ^(NSArray* objArray,bool isError) {
+        
+        NSLog(@"location upload is succesful");
+        if (isError) {
+            NSLog(@"post location failed, err=%@",objArray.firstObject);
+        }
+       
+        NSInteger checkInterval= dataStore.clientSetting.freshInterval;
+        if (checkInterval<=0) checkInterval=60;
+        [self performSelector:@selector(queryShuttleLocation) withObject:nil afterDelay:checkInterval ];
 
-    [req updateMyLocationToServer:aLoc callback:self];
+    };
+
+    [req updateMyLocationToServer:line location:aLoc callback:callback];
 
 }
 
@@ -140,8 +164,22 @@
     }
     
     NSLog(@"start to query the shuttle bus location");
+    
+    
+    void (^callbackFun) (NSArray*,bool)= ^ (NSArray* arrayObject,bool isError) {
+        if (!isError)[self getReturnedObjectArray: arrayObject];
+        else
+            NSLog(@"can't get ShuttleLocation,err=",arrayObject.firstObject);
+        
+        
+    };
+
+    ShuttleDataStore *store=[ShuttleDataStore instance];
+    NSString* lineID=store.clientSetting.lineID;
+    
     RestRequestor * req= [[RestRequestor alloc] init];
-    [req getReportedBusLineLocation:@""  callback:self];
+    [req getReportedBusLineLocation:lineID  callback:callbackFun];
+    
 }
 
 - (void) reportError:(NSString *)errorMsg {
@@ -153,15 +191,15 @@
     
     if (objectArray==nil || objectArray.count<1) return 0;
     
-    Location *lastPos=objectArray.lastObject;
-    NSLog(@"lat=%@,long=%@", lastPos.latitude,lastPos.longitude);
+    BusLocationInfo *lastPos=objectArray.lastObject;
+    NSLog(@"lat=%f,long=%f", lastPos->latitude,lastPos->longitude);
     isQueryInprogress=false;
     
     
     MKCoordinateSpan theSpan = MKCoordinateSpanMake(0.14,0.14);
     theSpan.latitudeDelta = 0.01;
     theSpan.longitudeDelta = 0.01;
-    CLLocationCoordinate2D center= CLLocationCoordinate2DMake([lastPos.latitude doubleValue], [lastPos.longitude doubleValue]);
+    CLLocationCoordinate2D center= CLLocationCoordinate2DMake(lastPos->latitude , lastPos->longitude);
     MKCoordinateRegion theRegion= MKCoordinateRegionMakeWithDistance(center, 250, 250);
     
     
@@ -172,7 +210,7 @@
     
     [mapView removeAnnotation:_myPoint];
     
-    NSString *titile = [NSString stringWithFormat:@"%@,%@",lastPos.latitude,lastPos.longitude];
+    NSString *titile = [NSString stringWithFormat:@"%f,%f",lastPos->latitude,lastPos->longitude];
     _myPoint = [[MyLocation alloc] initWithCoordinate:center andTitle:titile];
     //添加标注
     NSLog(@"New Location=%@",titile);
