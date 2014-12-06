@@ -362,6 +362,25 @@
     
 }
 
+- (void) getBusLineSchedule:(NSString*) lineID callback:(void(^) (NSArray*, bool) ) callbackFun {
+    RestQueryParamter * queryParameter= [[RestQueryParamter alloc]init];
+    queryParameter.uri=@"bus/webresources/";
+    queryParameter.path=@"stops";
+    queryParameter.fieldMap= @{
+                               @"busLine": @"busLine",
+                               @"longitude": @"longitude",
+                               @"latitude": @"latitude",
+                               @"time": @"time",
+                               @"altitude":@"altitude",
+                               @"name":@"name"
+                               };
+    queryParameter.getMap = @{
+                              @"line":lineID
+                              };
+
+    [self callRestGetAPIWithBlock:queryParameter  class:[BusScheduleStopInfo class] callback:callbackFun];
+   
+}
 
 
 @end

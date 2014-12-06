@@ -86,6 +86,15 @@
     XCTAssertGreaterThan(busArray.count, 0);
 }
 
+
+- (void) test_getBusLineSchedule {
+    [ShuttleAPI setServerURL:@"127.0.0.1:8080"];
+    NSArray * stopArray= [ShuttleAPI getBusLineSchedule:@"西线2号线" morningOrNight:YES];
+    XCTAssertNotNil(stopArray);
+    XCTAssertGreaterThan(stopArray.count, 0);
+}
+
+
 - (void) test_getBusLocation {
     [ShuttleAPI setServerURL:@"127.0.0.1:8080"];
     [self test_uploadBusLocation];

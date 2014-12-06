@@ -296,6 +296,7 @@
                     ShuttleDataStore *store= [ShuttleDataStore instance];
                     store.clientSetting.lineID=lineName;
                     NSLog(@"change the current lineID as %@",lineName);
+                    [controller viewWillAppear:NO];
                 }
                 
 				if (hideSidebar) {

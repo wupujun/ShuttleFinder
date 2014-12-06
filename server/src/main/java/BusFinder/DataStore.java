@@ -9,10 +9,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
+
+
 
 
 
@@ -40,6 +44,8 @@ public class DataStore {
 	static final private String saveFile="./BusStore.txt";
 	static final private String busLineMapTag="busLineMap";
 	static final private String userMapTag="userMap";
+	static final private String stopMapTag="stopMap";
+	
 	
 	public static class DataStoreSerializer implements JsonSerializer<DataStore>,JsonDeserializer<DataStore> {
 	    public JsonElement serialize(final DataStore person, final Type type, final JsonSerializationContext context) {
@@ -47,6 +53,7 @@ public class DataStore {
 	        
 	        HashMap<String, BusLine> busLineMap= DataStore.instance().getBuslinesMap();
 	        HashMap<String,User> userMap=DataStore.instance().getUsers();
+	        HashMap<String,TreeMap<String,BusStops> > stopMap=DataStore.instance().getStopMap();
 	        
 	        Gson gson1= new Gson();
 	        JsonElement busLineJson=gson1.toJsonTree(busLineMap, new TypeToken<Map<String, BusLine>>() {  
@@ -59,13 +66,18 @@ public class DataStore {
 	        //String userMapTxt=gson2.toJson(userMap, userMap.getClass());
 	        JsonElement userMapJson= gson2.toJsonTree(userMap, new TypeToken<Map<String, User>>() {  
 	            }.getType());
+	        
+	        Gson gson3= new Gson();
+	        //String userMapTxt=gson2.toJson(userMap, userMap.getClass());
+	        JsonElement stopMapJson= gson3.toJsonTree(stopMap, new TypeToken<Map<String, TreeMap<String,BusStops> >>() {  
+	            }.getType());
 
 	        
 	 	    //gson2.to    
-	        result.add(busLineMapTag, busLineJson );
-	        
-	     	        
+	        result.add(busLineMapTag, busLineJson );        
 	        result.add(userMapTag, userMapJson );
+	        result.add(stopMapTag,stopMapJson);
+	        
 	   
 	        return result;
 	    }
@@ -80,6 +92,7 @@ public class DataStore {
 				JsonObject obj= json.getAsJsonObject();
 				JsonElement busLineObj=obj.get(busLineMapTag);
 				JsonElement userObj=obj.get(userMapTag);
+				JsonElement stopMapObj=obj.get(stopMapTag);
 				
 				
 				
@@ -94,8 +107,15 @@ public class DataStore {
 				store.userMap=userMapGson.fromJson(userObj,
 						new TypeToken<Map<String, User>>() {}.getType()
 						);
+				
+				Gson stopMapGson=new Gson();
+				store.stopMap=userMapGson.fromJson(stopMapObj,
+						new TypeToken<Map<String, TreeMap<String,BusStops> >>() {}.getType()
+						);
+				
 				if (store.userMap==null) store.userMap= new HashMap<String,User>();
 				if (store.buslinesMap==null) store.buslinesMap= new HashMap<String,BusLine>();
+				if (store.stopMap==null) store.stopMap= new HashMap<String, TreeMap<String,BusStops> >();
 				
 			}
 			//store.buslinesMap= gson.fromJson(json, classOfT)
@@ -110,6 +130,7 @@ public class DataStore {
 		this.buslinesMap= new HashMap<String,BusLine>();
 		this.userMap= new HashMap<String,User>();
 		this.locationMap= new HashMap<String,ArrayList<Location>>();
+		this.stopMap= new HashMap<String,TreeMap<String,BusStops>>();
 	}
 	
 	private static DataStore instance=null;
@@ -185,7 +206,7 @@ public class DataStore {
 	public void clear() {
 		instance.setBuslinesMap(new HashMap<String,BusLine>() );
 		instance.setUsers(new HashMap<String,User>() );
-		
+		instance.setLocationMap(new HashMap<String,ArrayList<Location> >() );
 	}
 	
 	//getter&setter
@@ -217,6 +238,7 @@ public class DataStore {
 	private HashMap<String,BusLine> buslinesMap = new HashMap<String,BusLine>();
 	//private ArrayList<Location> locations= new ArrayList<Location>();
 	private HashMap<String,ArrayList<Location>> locationMap= new HashMap<String,ArrayList<Location>> ();
+	private HashMap<String,TreeMap<String,BusStops>> stopMap= new HashMap<String,TreeMap<String,BusStops>>();
 	//test method
 	static void main()
 	{
@@ -230,6 +252,9 @@ public class DataStore {
 		return locationMap;
 	}
 
+	public HashMap<String,TreeMap<String,BusStops>> getStopMap() {
+		return stopMap;
+	}
 
 
 

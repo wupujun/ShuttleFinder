@@ -16,7 +16,9 @@
 
 @implementation BusLocationInfo
 
+@end
 
+@implementation BusScheduleStopInfo
 @end
 
 @implementation ShuttleAPI
@@ -84,8 +86,43 @@ static NSString* _serverURL=nil;
 
 + (NSArray*) getBusLineSchedule: (NSString*) line
                  morningOrNight: (bool) isMorning {
-    return nil;
+    __block NSArray* busArray=nil;
     
+    dispatch_semaphore_t _sema = dispatch_semaphore_create(0);
+    
+    void(^callback)(NSArray*,bool) = ^(NSArray* objArray,bool isError) {
+        NSLog(@"uploadBusLocation returned with %d objects",objArray.count);
+        
+        if (isError){
+            
+            NSLog(@"Failed to call getBusLineSchedule"); //,error=%@", [objArray firstObject]);
+            
+        }
+        else
+            busArray=objArray;
+        
+        dispatch_semaphore_signal(_sema);
+    };
+    
+    NSTimeInterval checkEveryInterval = 0.05;
+    dispatch_queue_t mainq=dispatch_get_main_queue();
+    dispatch_async(mainq, ^(void) {
+        [ShuttleAPI getBusLineScheduleAsync:line
+                         morningOrNight:isMorning
+                               callback:callback];
+    });
+    
+    while(YES)
+    {
+        long ret=dispatch_semaphore_wait(_sema, DISPATCH_TIME_NOW );
+        if (ret==0) break;
+        
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:checkEveryInterval]];
+    }
+    
+    
+    
+    return busArray;
 }
 
 + (bool) uploadBusLocation: (NSString*) line
@@ -107,9 +144,9 @@ static NSString* _serverURL=nil;
     NSTimeInterval checkEveryInterval = 0.05;
     dispatch_queue_t mainq=dispatch_get_main_queue();
     dispatch_async(mainq, ^(void) {
-        [ShuttleAPI uploadBusLocationAsync:line morningOrNight:isMorning
-                           busLocationInfo:info
-                                  callback:callback];
+        [ShuttleAPI getBusLineScheduleAsync:line
+                    morningOrNight:YES
+                    callback:callback];
     });
     
     while(YES)
@@ -123,20 +160,6 @@ static NSString* _serverURL=nil;
     return isOK;
 }
 
-+ (bool) uploadBusLocationAsync: (NSString*) line
-            morningOrNight: (bool) isMorning
-           busLocationInfo: (BusLocationInfo*) info
-                  callback: (void(^)(NSArray*,bool) )callbackFun {
-    
-            RestRequestor *req= [[RestRequestor alloc]init];
-            [req setServerURL: [ShuttleAPI getServerURL]];
-    
-    [req updateMyLocationToServer:line location:info callback:callbackFun];
-    
-    
-    
-    return YES;
-}
 
 + (NSArray*) getBusLocation: (NSString*) line
              morningOrNight: (bool) isMorning
@@ -184,6 +207,30 @@ static NSString* _serverURL=nil;
         [req setServerURL: [ShuttleAPI getServerURL]];
     
         [req getReportedBusLineLocation:line callback:callbackFun];
+}
+
+
++ (void) getBusLineScheduleAsync: (NSString*) line
+                      morningOrNight: (bool) isMorning
+                            callback:(void(^) (NSArray*, bool isError)  )callbackFun {
+    RestRequestor *req= [[RestRequestor alloc]init];
+    [req setServerURL: [ShuttleAPI getServerURL]];
+    [req getBusLineSchedule:line callback:callbackFun];
+}
+
++ (bool) uploadBusLocationAsync: (NSString*) line
+                 morningOrNight: (bool) isMorning
+                busLocationInfo: (BusLocationInfo*) info
+                       callback: (void(^)(NSArray*,bool) )callbackFun {
+    
+    RestRequestor *req= [[RestRequestor alloc]init];
+    [req setServerURL: [ShuttleAPI getServerURL]];
+    
+    [req updateMyLocationToServer:line location:info callback:callbackFun];
+    
+    
+    
+    return YES;
 }
 
 

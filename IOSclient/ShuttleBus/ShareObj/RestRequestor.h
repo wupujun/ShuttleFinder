@@ -38,6 +38,7 @@
 //remote mothods
 - (void) getReportedBusLineLocation: (NSString*) lineID callback:(void(^) (NSArray*, bool) ) callbackFun;
 - (bool) updateMyLocationToServer:(NSString*) line location:(BusLocationInfo*) myLocation callback:(void(^) (NSArray*, bool) ) callbackFun;
+- (void) getBusLineSchedule:(NSString*) lineID callback:(void(^) (NSArray*, bool) ) callbackFun;
 
 //remote motheds with bloack for callback
 - (void) getAllBusline: (void (^)(NSArray* objArray,bool)) callbackFun;
@@ -45,6 +46,5 @@
 //local methods
 - (NSString*) getServerURL;
 - (bool) setServerURL: (NSString*) serverURL;
-
 
 @end

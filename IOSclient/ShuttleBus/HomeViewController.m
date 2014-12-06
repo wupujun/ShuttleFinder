@@ -33,6 +33,8 @@
     return self;
 }
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -81,7 +83,7 @@
 - (IBAction)applySettingButtonClick:(id)sender {
     NSString* ipAddress= _clientSettingView.serverIPLable.text;
     NSInteger freshInterview=[_clientSettingView.checkIntervalInMin.text floatValue]*1;
-    NSString* lineID= _clientSettingView.shuttleLineLabel.text;
+    //NSString* lineID= _clientSettingView.shuttleLineLabel.text;
     
     ShuttleDataStore* dataStore=[ShuttleDataStore instance];
     
@@ -89,7 +91,7 @@
     NSLog(@"fresh frequenct from %d to %d",dataStore.clientSetting.freshInterval, freshInterview);
     dataStore.clientSetting.serverIPPort = ipAddress;
     dataStore.clientSetting.freshInterval = freshInterview;
-    dataStore.clientSetting.lineID=lineID;
+    //dataStore.clientSetting.lineID=lineID;
     
     [dataStore saveToLocal];
     
@@ -107,5 +109,20 @@
 {
     [self resignFirstResponder];
 }
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    [super didMoveToParentViewController:parent];
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    _clientSettingView.shuttleLineLabel.text=dataStore.clientSetting.lineID;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    _clientSettingView.shuttleLineLabel.text=dataStore.clientSetting.lineID;
+    NSLog(@"HomeView will show!");
+    
+}
+
 
 @end

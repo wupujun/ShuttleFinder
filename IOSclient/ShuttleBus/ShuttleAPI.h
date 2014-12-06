@@ -34,6 +34,7 @@
 
 @interface BusScheduleStopInfo : NSObject
 {
+@public
     double longitude;
     double latitude;
     double altitude;
@@ -57,6 +58,10 @@
 
 + (NSArray*) getBusLineSchedule: (NSString*) line
                  morningOrNight: (bool) isMorning;
+
++ (void) getBusLineScheduleAsync: (NSString*) line
+                 morningOrNight: (bool) isMorning
+                            callback:(void(^) (NSArray*, bool isError)  )callbackFun;
 
 + (bool) uploadBusLocation: (NSString*) line
             morningOrNight: (bool) isMorning

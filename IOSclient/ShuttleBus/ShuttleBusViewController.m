@@ -223,4 +223,17 @@
     
     return objectArray.count;
 }
+
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    [super didMoveToParentViewController:parent];
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    
+    NSString* lineID=dataStore.clientSetting.lineID;
+    if (lineID!=nil) {
+        self.title= lineID;
+    }
+}
 @end

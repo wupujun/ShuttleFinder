@@ -17,6 +17,69 @@
 
 @implementation ClientSettingTabController
 
+- (IBAction)showStopInfo:(id)sender {
+    
+    ShuttleDataStore* dataStore=[ShuttleDataStore instance];
+    NSString* lineID= dataStore.clientSetting.lineID;
+    
+    NSArray * stopArray= [ShuttleAPI getBusLineSchedule:lineID morningOrNight:YES];
+    
+    
+    
+    
+    
+    
+    NSString *info=@"";
+    NSArray* sortedArray=nil;
+    
+    if (stopArray==nil)
+    {
+        info=@"未能获取到班车信息！";
+    }
+    else
+    {
+        sortedArray = [stopArray sortedArrayUsingComparator:(NSComparator)^(id obj1, id obj2) {
+             BusScheduleStopInfo* stop1=obj1;
+             BusScheduleStopInfo* stop2=obj2;
+            NSString* time1=stop1->time;
+            NSString* time2=stop2->time;
+            
+            NSComparisonResult result=[time1 compare:time2];
+            
+            switch(result)
+            {
+                case NSOrderedAscending:
+                    return NSOrderedDescending;
+                case NSOrderedDescending:
+                    return NSOrderedAscending;
+                case NSOrderedSame:
+                    return NSOrderedSame;
+                default:
+                    return NSOrderedSame;
+            } // 时间从近到远（远近相对当前时间而言）
+            
+        }];
+        
+        for(int i=0;i<sortedArray.count;i++)
+        {
+            BusScheduleStopInfo* stop=[stopArray objectAtIndex:i];
+            info= [NSString stringWithFormat:@"%@\n%@\t%@", info,stop->time,stop->name ];
+        }
+    }
+    
+    UIAlertView*alert = [[UIAlertView alloc]initWithTitle:@"提示"
+                         
+                                                  message:info
+                         
+                                                 delegate:nil
+                         
+                                        cancelButtonTitle:@"确定"
+                         
+                                        otherButtonTitles:nil];
+    
+    [alert show];
+}
+
 @synthesize settingTable,checkEndTime,checkStartTime;
 
 - (void)viewDidLoad {
