@@ -4,6 +4,7 @@ import urllib
 import urllib2
 import StringIO
 import chardet
+import sys
 
 def readCSVasDict (csvfile):
 
@@ -25,10 +26,22 @@ def urllibPost(url,dic):
     response=urllib2.urlopen(req)
     return
 
+#main entry
+
 lineCSV='busLines.csv'
 stopCSV='busstops.csv'
-url="http://127.0.0.1:8080/bus/webresources/stops"
 
+if len(sys.argv)<2:
+    print "Please assign host IP."
+    sys.exit(0)
+
+host=sys.argv[1]
+url="http://"+host+":8080/bus/webresources/stops"
+
+
+
+#url="http://192.168.0.12:8080/bus/webresources/stops"
+#url="http://192.168.0.12:8080/bus/webresources/stops"
 
 dicArray=readCSVasDict(stopCSV)
 
